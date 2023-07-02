@@ -1,5 +1,5 @@
 import "firebase/auth"
-import { Auth, getAuth } from "firebase/auth";
+import { Auth, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 import firebase from "firebase/compat/app";
 
 const firebaseConfig = {
@@ -12,5 +12,14 @@ const firebaseConfig = {
 };
 
 const app: firebase.app.App = firebase.initializeApp(firebaseConfig);
-export const authService: Auth = getAuth(app);
+const authService: Auth = getAuth(app);
 
+async function CreateUser(email: string, password: string): Promise<UserCredential> {
+  return await createUserWithEmailAndPassword(authService, email, password);
+}
+
+async function SignIn(email: string, password: string): Promise<UserCredential> {
+  return await signInWithEmailAndPassword(authService, email, password);
+}
+
+export { authService, CreateUser, SignIn }
