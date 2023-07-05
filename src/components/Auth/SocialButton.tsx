@@ -1,4 +1,4 @@
-import { SignInWithPopup, GoogleAuthProvider, GithubAuthProvider, AuthProvider } from "@/myFirebase";
+import { SignInWithPopup, GoogleAuthProvider, GithubAuthProvider, AuthProvider, UserCredential } from "@/myFirebase";
 import { ReactElement } from "react";
 
 enum SocialType {
@@ -23,7 +23,7 @@ type SocialButtonProps = {
 function SocialButton({ type }: SocialButtonProps) {
     const onClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         const provider: AuthProvider = CreateProvider(type);
-        const data = SignInWithPopup(provider);
+        const data: Promise<UserCredential> = SignInWithPopup(provider);
     };
 
     return (

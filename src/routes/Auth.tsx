@@ -1,7 +1,7 @@
-import AuthInput from "@components/AuthInput";
+import AuthInput from "@components/Auth/AuthInput";
 import { CreateUser, SignIn, AuthError, UserCredential } from "@/myFirebase";
 import { useState } from "react";
-import { SocialButton, SocialType } from "@/components/SocialButton";
+import { SocialButton, SocialType } from "@/components/Auth/SocialButton";
 
 function Auth(): React.ReactElement {
     const [email, setEmail] = useState<string>("");
