@@ -1,5 +1,4 @@
-import "firebase/auth"
-import { Auth, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { Auth, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, UserCredential, signInWithPopup, AuthProvider } from "firebase/auth";
 import firebase from "firebase/compat/app";
 
 const firebaseConfig = {
@@ -22,4 +21,10 @@ async function SignIn(email: string, password: string): Promise<UserCredential> 
   return await signInWithEmailAndPassword(authService, email, password);
 }
 
-export { authService, CreateUser, SignIn }
+async function SignInWithPopup(provider: AuthProvider) {
+  return await signInWithPopup(authService, provider);
+}
+
+export type { User, AuthError, UserCredential, AuthProvider } from "firebase/auth";
+export { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
+export { authService, CreateUser, SignIn, SignInWithPopup }

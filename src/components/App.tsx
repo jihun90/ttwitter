@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import AppRouter from "@components/Router";
 import { authService } from "@/myFirebase.ts";
-import { User } from "firebase/auth";
 
 function App() {
     const [init, setInit] = useState<boolean>(false);

@@ -1,22 +1,13 @@
-import { CreateUser, SignIn } from "@/myFirebase";
-import { AuthError, UserCredential } from "firebase/auth";
+import AuthInput from "@components/AuthInput";
+import { CreateUser, SignIn, AuthError, UserCredential } from "@/myFirebase";
 import { useState } from "react";
+import { SocialButton, SocialType } from "@/components/SocialButton";
 
 function Auth(): React.ReactElement {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isNewAccount, setIsNewAccount] = useState<boolean>(true);
     const [error, SetError] = useState<string>("");
-
-    function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const { name, value } = event.target;
-
-        if (name === "email") {
-            setEmail(value);
-        } else if (name === "password") {
-            setPassword(value);
-        }
-    }
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -37,28 +28,20 @@ function Auth(): React.ReactElement {
         console.log(data);
     }
 
-    function toggleAccount() {
-        setIsNewAccount((prev: boolean) => !prev);
-    }
+    const toggleAccount = () => setIsNewAccount((prev: boolean) => !prev);
 
     return (
         <div>
             <form onSubmit={onSubmit}>
-                <input
-                    name="email"
-                    type="email"
-                    placeholder="Email"
-                    required
-                    value={email}
-                    onChange={onChange}
+                <AuthInput
+                    inputType={"email"}
+                    state={email}
+                    dispatch={setEmail}
                 />
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    required
-                    value={password}
-                    onChange={onChange}
+                <AuthInput
+                    inputType="password"
+                    state={password}
+                    dispatch={setPassword}
                 />
                 <input
                     type="submit"
@@ -68,8 +51,8 @@ function Auth(): React.ReactElement {
             {error}
             <span onClick={toggleAccount}>{isNewAccount ? " Sign In" : "Create Account"}</span>
             <div>
-                <button>Continue with Google</button>
-                <button>Continue with Github</button>
+                <SocialButton type={SocialType.Google} />
+                <SocialButton type={SocialType.Github} />
             </div>
         </div>
     );
