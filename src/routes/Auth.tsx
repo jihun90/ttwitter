@@ -3,7 +3,7 @@ import { CreateUser, SignIn, AuthError, UserCredential } from "@/myFirebase";
 import { useState } from "react";
 import { SocialButton, SocialType } from "@/components/Auth/SocialButton";
 
-function Auth(): React.ReactElement {
+function Auth(): React.JSX.Element {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isNewAccount, setIsNewAccount] = useState<boolean>(true);
@@ -33,20 +33,9 @@ function Auth(): React.ReactElement {
     return (
         <div>
             <form onSubmit={onSubmit}>
-                <AuthInput
-                    inputType={"email"}
-                    state={email}
-                    dispatch={setEmail}
-                />
-                <AuthInput
-                    inputType="password"
-                    state={password}
-                    dispatch={setPassword}
-                />
-                <input
-                    type="submit"
-                    value={isNewAccount ? "Create Account" : "Sign In"}
-                />
+                <AuthInput inputType={"email"} state={email} dispatch={setEmail} />
+                <AuthInput inputType="password" state={password} dispatch={setPassword} />
+                <input type="submit" value={isNewAccount ? "Create Account" : "Sign In"} />
             </form>
             {error}
             <span onClick={toggleAccount}>{isNewAccount ? " Sign In" : "Create Account"}</span>
