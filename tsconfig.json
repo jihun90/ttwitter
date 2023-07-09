@@ -30,15 +30,11 @@
     "jsx": "react-jsx",
     /* Linting */
     "strict": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noFallthroughCasesInSwitch": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true
+    // "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "."
   ],
   "references": [
     {
