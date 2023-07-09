@@ -1,5 +1,5 @@
-import AuthInput from "@components/Auth/AuthInput";
-import { CreateUser, SignIn, AuthError, UserCredential } from "@/myFirebase";
+import AuthInput from "@/components/Auth/AuthInput";
+import { FirebaseObject, UserCredential, AuthError } from "@/myFirebase";
 import { useState } from "react";
 import { SocialButton, SocialType } from "@/components/Auth/SocialButton";
 
@@ -14,9 +14,9 @@ function Auth(): React.JSX.Element {
         let data: Promise<UserCredential>;
 
         if (isNewAccount) {
-            data = CreateUser(email, password);
+            data = FirebaseObject.GetInstance().Auth.CreateUser(email, password);
         } else {
-            data = SignIn(email, password);
+            data = FirebaseObject.GetInstance().Auth.SignIn(email, password);
         }
 
         data.then((userCredential: UserCredential) => {
@@ -33,9 +33,20 @@ function Auth(): React.JSX.Element {
     return (
         <div>
             <form onSubmit={onSubmit}>
-                <AuthInput inputType={"email"} state={email} dispatch={setEmail} />
-                <AuthInput inputType="password" state={password} dispatch={setPassword} />
-                <input type="submit" value={isNewAccount ? "Create Account" : "Sign In"} />
+                <AuthInput
+                    inputType={"email"}
+                    state={email}
+                    dispatch={setEmail}
+                />
+                <AuthInput
+                    inputType="password"
+                    state={password}
+                    dispatch={setPassword}
+                />
+                <input
+                    type="submit"
+                    value={isNewAccount ? "Create Account" : "Sign In"}
+                />
             </form>
             {error}
             <span onClick={toggleAccount}>{isNewAccount ? " Sign In" : "Create Account"}</span>

@@ -1,10 +1,11 @@
-import { authService } from "@/myFirebase";
-import { useNavigate } from "react-router-dom";
+import { FirebaseObject } from "@/myFirebase";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 
 function LogOutButton(): React.JSX.Element {
-    const navigate = useNavigate();
+    const navigate :NavigateFunction = useNavigate();
     const onLogOutClick = () => {
-        authService.signOut().then(() => navigate("/"));
+        FirebaseObject.GetInstance().Auth.SignOut().then(() => navigate("/"))
+        .catch(()=> {throw Error('SignOut Error')});
     };
 
     return <button onClick={onLogOutClick}>Log Out</button>;
