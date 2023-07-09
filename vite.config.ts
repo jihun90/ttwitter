@@ -1,11 +1,10 @@
 import { defineConfig, UserConfigExport } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
-import eslint from "vite-plugin-eslint";
 
 const config: UserConfigExport = {
     base: "./",
-    plugins: [react(), tsconfigPaths(), eslint()],
+    plugins: [react(), tsconfigPaths()],
     resolve: {
         alias: [
             { find: "@", replacement: __dirname + "/src/" },
