@@ -1,9 +1,9 @@
-import { GoogleAuthProvider, GithubAuthProvider, AuthProvider, UserCredential } from "@/myFirebase";
-import { FirebaseObject } from "@/myFirebase";
+import { GoogleAuthProvider, GithubAuthProvider, AuthProvider, UserCredential } from '@/myFirebase';
+import { FirebaseObject } from '@/myFirebase';
 
 enum SocialType {
-    Google = "Google",
-    Github = "Github",
+    Google = 'Google',
+    Github = 'Github',
 }
 
 function CreateProvider(type: SocialType): AuthProvider {
@@ -12,7 +12,7 @@ function CreateProvider(type: SocialType): AuthProvider {
     } else if (type === SocialType.Github) {
         return new GithubAuthProvider();
     } else {
-        throw Error("Can not find social Provider");
+        throw Error('Can not find social Provider');
     }
 }
 
@@ -26,12 +26,7 @@ function SocialButton({ type }: SocialButtonProps) {
         const data: Promise<UserCredential> = FirebaseObject.GetInstance().Auth.SignInWithPopup(provider);
     };
 
-    return (
-        <button
-            name={type.toString()}
-            onClick={onClick}
-        >{`Continue With ${type.toString()}`}</button>
-    );
+    return <button name={type.toString()} onClick={onClick}>{`Continue With ${type.toString()}`}</button>;
 }
 
 export { SocialType };

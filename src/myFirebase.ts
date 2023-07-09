@@ -10,9 +10,9 @@ import {
     NextOrObserver,
     onAuthStateChanged,
     signOut,
-} from "firebase/auth";
-import { FirebaseApp, initializeApp } from "firebase/app";
-import { Firestore, getFirestore } from "firebase/firestore";
+} from 'firebase/auth';
+import { FirebaseApp, initializeApp } from 'firebase/app';
+import { Firestore, getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -80,5 +80,5 @@ class DB {
 }
 
 export { FirebaseObject };
-export type { User, AuthError, UserCredential, AuthProvider } from "firebase/auth";
-export { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
+export type { User, AuthError, UserCredential, AuthProvider } from 'firebase/auth';
+export { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';

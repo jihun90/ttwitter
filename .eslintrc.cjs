@@ -1,5 +1,4 @@
 /* eslint-env node */
-
 module.exports = {
     "root": true,
     "env": {
@@ -13,7 +12,7 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        'plugin:react-hooks/recommended',
+        'plugin:react-hooks/recommended'
     ],
     "parser": '@typescript-eslint/parser',
     "parserOptions": {
@@ -23,8 +22,20 @@ module.exports = {
         "project": "./tsconfig.json",
         "tsconfigRootDir": __dirname,
     },
-    "plugins": ['react', 'react-refresh', '@typescript-eslint'],
+    "plugins": ['react', 'react-refresh', '@typescript-eslint', 'prettier'],
     "rules": {
+        'prettier/prettier': [
+            'error',
+            {
+              'singleQuote': true,
+              'semi': true,
+              'useTabs': false,
+              'tabWidth': 4,
+              'printWidth': 120,
+              'bracketSpacing': true,
+              'arrowParens': 'avoid',
+            },
+          ],
         'react-refresh/only-export-components': [
             'warn',
             { "allowConstantExport": true },
