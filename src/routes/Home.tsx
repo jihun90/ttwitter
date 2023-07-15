@@ -1,30 +1,36 @@
-import { FirebaseObject, ttweetData } from '@/myFirebase';
+import { AuthService } from '@/services/firebase/authService';
+import { DBService } from '@/services/firebase/dbService';
+import { MessageInfo } from 'model.firebase.collection';
 import { useState, useEffect } from 'react';
 
 function Home(): React.JSX.Element {
     const [ttweet, setTtweet] = useState('');
-    const [ttweets, setTtweets] = useState<ttweetData[]>([]);
-
-    useEffect(() => {
-        FirebaseObject.GetInstance()
-            .DB.getCollection()
+    const [ttweets, setTtweets] = useState<MessageInfo[]>([]);
+    const getTtweets = () => {
+        DBService.GetInstance()
+            .getCollection()
             .then((dbTtweets): void => {
                 dbTtweets.forEach(dbTtweet => {
-                    const data = dbTtweet.data() as ttweetData;
-                    data.id = dbTtweet.id;
+                    const data = dbTtweet.data() as MessageInfo;
                     setTtweets(prev => [data, ...prev]);
                 });
             })
             .catch((): void => {
                 throw Error('DB.getCollection');
             });
+    };
+
+    useEffect(() => {
+        getTtweets();
     }, []);
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
 
-        FirebaseObject.GetInstance()
-            .DB.setCollection(ttweet)
+        const userId: string = AuthService.GetInstance().user?.tenantId ?? '';
+
+        DBService.GetInstance()
+            .setCollection(ttweet, userId)
             .then(() => setTtweet(''))
             .catch((): void => {
                 throw Error('DB.setCollection');
@@ -53,7 +59,7 @@ function Home(): React.JSX.Element {
             <div>
                 {ttweets.map(ttweet => (
                     <div key={ttweet.id}>
-                        <h4>{ttweet.msg}</h4>
+                        <h4>{ttweet.text}</h4>
                     </div>
                 ))}
             </div>

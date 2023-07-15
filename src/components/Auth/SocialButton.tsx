@@ -1,5 +1,10 @@
-import { GoogleAuthProvider, GithubAuthProvider, AuthProvider, UserCredential } from '@/myFirebase';
-import { FirebaseObject } from '@/myFirebase';
+import {
+    GoogleAuthProvider,
+    GithubAuthProvider,
+    AuthProvider,
+    UserCredential,
+    AuthService,
+} from '@/services/firebase/authService';
 
 enum SocialType {
     Google = 'Google',
@@ -23,7 +28,7 @@ type SocialButtonProps = {
 function SocialButton({ type }: SocialButtonProps) {
     const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         const provider: AuthProvider = CreateProvider(type);
-        const data: Promise<UserCredential> = FirebaseObject.GetInstance().Auth.SignInWithPopup(provider);
+        const data: Promise<UserCredential> = AuthService.GetInstance().SignInWithPopup(provider);
     };
 
     return <button name={type.toString()} onClick={onClick}>{`Continue With ${type.toString()}`}</button>;

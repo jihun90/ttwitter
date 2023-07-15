@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import AppRouter from '@/components/Router';
-import { User, FirebaseObject } from '@/myFirebase.ts';
+import { AuthService, UserInfo } from '@/services/firebase/authService';
 
 function App() {
     const [init, setInit] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
     useEffect(() => {
-        FirebaseObject.GetInstance().Auth.OnAuthChanged((user: User | null) => {
-            if (user) {
+        AuthService.GetInstance().OnAuthChanged(user => {
+            if (AuthService.GetInstance().IsUserInfo(user)) {
                 setIsLoggedIn(true);
             } else {
                 setIsLoggedIn(false);

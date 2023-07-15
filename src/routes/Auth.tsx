@@ -1,5 +1,5 @@
 import AuthInput from '@/components/Auth/AuthInput';
-import { FirebaseObject, UserCredential, AuthError } from '@/myFirebase';
+import { UserCredential, AuthError, AuthService } from '@/services/firebase/authService';
 import { useState } from 'react';
 import { SocialButton, SocialType } from '@/components/Auth/SocialButton';
 
@@ -14,9 +14,9 @@ function Auth(): React.JSX.Element {
         let data: Promise<UserCredential>;
 
         if (isNewAccount) {
-            data = FirebaseObject.GetInstance().Auth.CreateUser(email, password);
+            data = AuthService.GetInstance().CreateUser(email, password);
         } else {
-            data = FirebaseObject.GetInstance().Auth.SignIn(email, password);
+            data = AuthService.GetInstance().SignIn(email, password);
         }
 
         data.then((userCredential: UserCredential) => {
