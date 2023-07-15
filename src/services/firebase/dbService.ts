@@ -10,8 +10,8 @@ import {
     Query,
     query,
 } from 'firebase/firestore';
-import { CollectionID, MessageInfo } from 'model.firebase.collection';
-import { App } from './appService';
+import { App } from '@/services/firebase/appService';
+import { CollectionID, MessageInfo } from '@/models/collection';
 
 class DBService {
     private static sInstance: DBService;

@@ -1,6 +1,6 @@
 import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
-import { MessageInfo } from 'model.firebase.collection';
+import { MessageInfo } from '@/models/collection';
 import { useState, useEffect } from 'react';
 
 function Home(): React.JSX.Element {
