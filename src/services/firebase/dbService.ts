@@ -1,24 +1,31 @@
-import {
-    Firestore,
-    getFirestore,
-    collection,
-    doc,
-    setDoc,
-    DocumentData,
-    getDocs,
-    QuerySnapshot,
-    Query,
-    query,
-} from 'firebase/firestore';
 import { App } from '@/services/firebase/appService';
-import { CollectionID, MessageInfo } from '@/models/collection';
+import {
+    CollectionContainer,
+    CollectionDictionary,
+    CollectionID,
+    TtweetCollection,
+} from '@/models/collectionContainer';
+import { Firestore, getFirestore } from 'firebase/firestore';
 
 class DBService {
     private static sInstance: DBService;
     private dbService: Firestore;
-
+    // public collection: CollectionContainer;
+    private collections: CollectionDictionary = {} as CollectionDictionary;
     constructor() {
         this.dbService = getFirestore(App.GetInstance().app);
+
+        this.collections = {
+            ttweet: new TtweetCollection(this.dbService),
+        };
+    }
+
+    getCollection(id: CollectionID): CollectionContainer {
+        if (id in CollectionID) {
+            return this.collections[id];
+        }
+
+        throw Error('have not Collection');
     }
 
     public static GetInstance(): DBService {
@@ -26,17 +33,6 @@ class DBService {
             DBService.sInstance = new DBService();
         }
         return DBService.sInstance;
-    }
-
-    async setCollection(text: string, uId: string): Promise<void> {
-        const newDoc = doc(collection(this.dbService, CollectionID.ttweet));
-        const data: MessageInfo = { id: newDoc.id, text: text, createdAt: Date.now(), createdBy: uId };
-        await setDoc(newDoc, data);
-    }
-
-    async getCollection(): Promise<QuerySnapshot<DocumentData, DocumentData>> {
-        const queryData: Query<DocumentData, DocumentData> = query(collection(this.dbService, CollectionID.ttweet));
-        return await getDocs(queryData);
     }
 }
 
