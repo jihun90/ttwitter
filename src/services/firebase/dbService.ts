@@ -28,9 +28,9 @@ class DBService {
         return DBService.sInstance;
     }
 
-    async setCollection(text: string, user: string): Promise<void> {
+    async setCollection(text: string, uId: string): Promise<void> {
         const newDoc = doc(collection(this.dbService, CollectionID.ttweet));
-        const data: MessageInfo = { id: newDoc.id, text: text, createdAt: Date.now(), createdBy: user };
+        const data: MessageInfo = { id: newDoc.id, text: text, createdAt: Date.now(), createdBy: uId };
         await setDoc(newDoc, data);
     }
 

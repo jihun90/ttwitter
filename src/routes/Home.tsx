@@ -27,10 +27,10 @@ function Home(): React.JSX.Element {
     const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
 
-        const userId: string = AuthService.GetInstance().user?.tenantId ?? '';
+        const uId: string = AuthService.GetInstance().user?.uid ?? '';
 
         DBService.GetInstance()
-            .setCollection(ttweet, userId)
+            .setCollection(ttweet, uId)
             .then(() => setTtweet(''))
             .catch((): void => {
                 throw Error('DB.setCollection');
