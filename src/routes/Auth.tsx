@@ -11,21 +11,10 @@ function Auth(): React.JSX.Element {
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        let data: Promise<UserCredential>;
 
-        if (isNewAccount) {
-            data = AuthService.GetInstance().CreateUser(email, password);
-        } else {
-            data = AuthService.GetInstance().SignIn(email, password);
-        }
-
-        data.then((userCredential: UserCredential) => {
-            const user: UserCredential = userCredential;
-        }).catch((error: AuthError) => {
-            SetError(error.message);
-        });
-
-        console.log(data);
+        const [userCredential, errorMsg] = GetUserCredential(isNewAccount, email, password);
+        SetError(errorMsg);
+        console.log(userCredential);
     }
 
     const toggleAccount = () => setIsNewAccount((prev: boolean) => !prev);
@@ -45,6 +34,27 @@ function Auth(): React.JSX.Element {
             </div>
         </div>
     );
+}
+
+function GetUserCredential(isNewAccount: boolean, email: string, password: string): [UserCredential, string] {
+    let promise: Promise<UserCredential>;
+    if (isNewAccount) {
+        promise = AuthService.GetInstance().CreateUser(email, password);
+    } else {
+        promise = AuthService.GetInstance().SignIn(email, password);
+    }
+
+    let user = {} as UserCredential;
+    let errorMsg = '';
+    promise
+        .then((userCredential: UserCredential) => {
+            user = userCredential;
+        })
+        .catch((error: AuthError) => {
+            errorMsg = error.message;
+        });
+
+    return [user, errorMsg];
 }
 
 export default Auth;
