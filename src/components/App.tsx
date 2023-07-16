@@ -7,11 +7,8 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     useEffect(() => {
         AuthService.GetInstance().OnAuthChanged(user => {
-            if (AuthService.GetInstance().IsUserInfo(user)) {
-                setIsLoggedIn(true);
-            } else {
-                setIsLoggedIn(false);
-            }
+            const isUser = AuthService.GetInstance().IsUserInfo(user);
+            setIsLoggedIn(isUser);
             setInit(true);
         });
     }, []);
