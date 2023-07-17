@@ -7,9 +7,11 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     useEffect(() => {
         AuthService.GetInstance().OnAuthChanged(user => {
-            const isUser = AuthService.GetInstance().IsUserInfo(user);
-            setIsLoggedIn(isUser);
-            setInit(true);
+            if (!user) return; //ToDo user가 없을때 처리
+            if (AuthService.GetInstance().IsUserInfo(user)) {
+                setIsLoggedIn(true);
+                setInit(true);
+            }
         });
     }, []);
 

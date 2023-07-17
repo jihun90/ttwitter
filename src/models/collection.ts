@@ -1,5 +1,16 @@
-import { Firestore, collection, doc, setDoc, DocumentData, getDocs, Query, query } from 'firebase/firestore';
-import { CollectionContainer, CollectionID, MessageInfo, isMessageInfo, Prop, Action } from './collectionContainer';
+import {
+    Firestore,
+    collection,
+    doc,
+    setDoc,
+    DocumentData,
+    getDocs,
+    Query,
+    query,
+    onSnapshot,
+    QuerySnapshot,
+} from 'firebase/firestore';
+import { CollectionContainer, CollectionID, MessageInfo, isMessageInfo, Prop } from './collectionContainer';
 
 export default abstract class Collection implements CollectionContainer {
     public abstract id: CollectionID;
@@ -10,7 +21,7 @@ export default abstract class Collection implements CollectionContainer {
     }
 
     set(msg: MessageInfo) {
-        const newDoc = doc(collection(this.firestore, 'ttweet'));
+        const newDoc = doc(collection(this.firestore, this.id));
         if (!msg.id) {
             msg.id = newDoc.id;
         }
@@ -72,5 +83,23 @@ export default abstract class Collection implements CollectionContainer {
             });
 
         return isSucess;
+    }
+
+    onSnapshot(prop: Prop<MessageInfo[]>): boolean {
+        const [, action] = prop;
+
+        onSnapshot(collection(this.firestore, this.id), (snapShot: QuerySnapshot<DocumentData, DocumentData>) => {
+            const ttweetArr = snapShot.docs.map(snapShot => {
+                const messageInfo = snapShot.data();
+                if (isMessageInfo(messageInfo)) {
+                    return messageInfo;
+                }
+            });
+            if (ttweetArr.length > 0) {
+                action(ttweetArr as MessageInfo[]);
+            }
+        });
+
+        return true;
     }
 }

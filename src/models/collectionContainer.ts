@@ -17,6 +17,11 @@ export interface CollectionContainer {
     set(msg: MessageInfo): void;
     get(): MessageInfo[];
     insertToProp(prop: Prop<MessageInfo[]>): boolean;
+    onSnapshot(prop: Prop<MessageInfo[]>): boolean;
+}
+
+export function isCollection(value: unknown): value is CollectionContainer {
+    return (value as CollectionContainer).id in CollectionID;
 }
 
 export enum CollectionID {

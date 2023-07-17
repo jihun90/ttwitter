@@ -1,10 +1,5 @@
 import { App } from '@/services/firebase/appService';
-import {
-    CollectionContainer,
-    CollectionDictionary,
-    CollectionID,
-    TtweetCollection,
-} from '@/models/collectionContainer';
+import { CollectionDictionary, TtweetCollection } from '@/models/collectionContainer';
 import { Firestore, getFirestore } from 'firebase/firestore';
 
 class DBService {
@@ -20,12 +15,8 @@ class DBService {
         };
     }
 
-    getCollection(id: CollectionID): CollectionContainer {
-        if (id in CollectionID) {
-            return this.collections[id];
-        }
-
-        throw Error('have not Collection');
+    get Collection() {
+        return this.collections;
     }
 
     public static GetInstance(): DBService {

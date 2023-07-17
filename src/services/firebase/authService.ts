@@ -17,7 +17,6 @@ type UserInfo = User;
 class AuthService {
     private static sInstance: AuthService;
     private authService: Authorization;
-    public user?: UserInfo;
 
     public static GetInstance(): AuthService {
         if (!AuthService.sInstance) {
@@ -28,10 +27,10 @@ class AuthService {
 
     constructor() {
         this.authService = getAuth(App.GetInstance().app);
+    }
 
-        if (this.IsUserInfo(this.authService.currentUser)) {
-            this.user = this.authService.currentUser;
-        }
+    get user() {
+        return this.authService.currentUser;
     }
 
     async CreateUser(email: string, password: string): Promise<UserCredential> {
@@ -55,7 +54,7 @@ class AuthService {
     }
 
     IsUserInfo(user: unknown): user is UserInfo {
-        return (user as UserInfo).tenantId != undefined;
+        return (user as UserInfo).uid != undefined;
     }
 }
 
