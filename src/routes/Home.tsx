@@ -2,6 +2,7 @@ import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
 import { CollectionID, MessageInfo, isCollection } from '@/models/collectionContainer';
 import { useState, useEffect } from 'react';
+import Ttweet from '@/components/Ttweet';
 
 function Home(): React.JSX.Element {
     const [ttweet, setTtweet] = useState('');
@@ -50,9 +51,7 @@ function Home(): React.JSX.Element {
             </form>
             <div>
                 {ttweets.map(ttweet => (
-                    <div key={ttweet.id}>
-                        <h4>{ttweet.text}</h4>
-                    </div>
+                    <Ttweet ttweetObj={ttweet} />
                 ))}
             </div>
         </div>

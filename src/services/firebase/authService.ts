@@ -30,7 +30,9 @@ class AuthService {
     }
 
     get user() {
-        return this.authService.currentUser;
+        if (this.IsUserInfo(this.authService.currentUser)) {
+            return this.authService.currentUser;
+        }
     }
 
     async CreateUser(email: string, password: string): Promise<UserCredential> {
