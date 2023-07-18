@@ -19,13 +19,13 @@ function Ttweet({ ttweetObj }: Prop): React.JSX.Element {
             {editting ? (
                 <>
                     <form>
+                        <h4>{ttweetObj.text}</h4>
                         <input value={newTtweet} required />
                     </form>
                     <button onClick={toggleEdtting}>Cancel</button>
                 </>
             ) : (
                 <>
-                    <h4>{ttweetObj.text}</h4>
                     {isOwner && (
                         <div>
                             <h4>{ttweetObj.text}</h4>
