@@ -28,14 +28,9 @@ export default abstract class Collection implements CollectionContainer {
         }
         const promise = setDoc(newDoc, msg);
 
-        let isSucess = false;
-        await promise
-            .then(() => {
-                isSucess = true;
-            })
-            .catch(() => {
-                isSucess = false;
-            });
+        await promise.catch(() => {
+            Error(`Error : set ${this.id} collection`);
+        });
     }
 
     get(): MessageInfo[] {
@@ -60,11 +55,10 @@ export default abstract class Collection implements CollectionContainer {
         return state;
     }
 
-    insertToProp(prop: Prop<MessageInfo[]>): void {
+    appendToProp(prop: Prop<MessageInfo[]>): void {
         const queryData: Query<DocumentData, DocumentData> = query(collection(this.firestore, this.id));
         const promise = getDocs(queryData);
 
-        let isSucess = false;
         const [state, action] = prop;
         promise
             .then(response => {
@@ -74,10 +68,8 @@ export default abstract class Collection implements CollectionContainer {
                         action([doc, ...state]);
                     }
                 });
-                isSucess = true;
             })
             .catch(() => {
-                isSucess = false;
                 Error(`Error : get ${this.id}collection`);
             });
     }
@@ -101,16 +93,10 @@ export default abstract class Collection implements CollectionContainer {
     delete(message: MessageInfo) {
         if (!message.id) return false;
 
-        let isSucess = false;
-
         const docToBeDeleted = doc(collection(this.firestore, this.id), message.id);
         const promise = deleteDoc(docToBeDeleted);
-        promise
-            .then(() => {
-                isSucess = true;
-            })
-            .catch(() => {
-                Error(`Error : delete Message (message if : ${message.id ?? ''})`);
-            });
+        promise.catch(() => {
+            Error(`Error : delete Message (message if : ${message.id ?? ''})`);
+        });
     }
 }

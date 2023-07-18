@@ -11,7 +11,7 @@ function Home(): React.JSX.Element {
     useEffect(() => {
         const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
         if (isCollection(collection)) {
-            const isSucess = collection.onSnapshot([ttweets, setTtweets]);
+            collection.onSnapshot([ttweets, setTtweets]);
         }
     }, [ttweets]);
 

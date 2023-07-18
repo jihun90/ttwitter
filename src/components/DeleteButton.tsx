@@ -11,8 +11,7 @@ export default function DeleteButton({ ttweetobj }: Prop) {
         if (ok) {
             const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
             if (isCollection(collection)) {
-                const res = collection.delete(ttweetobj);
-                console.log(res);
+                collection.delete(ttweetobj);
             }
         }
     }
