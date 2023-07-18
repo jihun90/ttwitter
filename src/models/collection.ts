@@ -1,7 +1,6 @@
 import {
     Firestore,
     collection,
-    doc,
     setDoc,
     DocumentData,
     getDocs,
@@ -9,6 +8,8 @@ import {
     query,
     onSnapshot,
     QuerySnapshot,
+    doc,
+    deleteDoc,
 } from 'firebase/firestore';
 import { CollectionContainer, CollectionID, MessageInfo, isMessageInfo, Prop } from './collectionContainer';
 
@@ -20,7 +21,7 @@ export default abstract class Collection implements CollectionContainer {
         this.firestore = firestore;
     }
 
-    set(msg: MessageInfo) {
+    async set(msg: MessageInfo) {
         const newDoc = doc(collection(this.firestore, this.id));
         if (!msg.id) {
             msg.id = newDoc.id;
@@ -28,15 +29,13 @@ export default abstract class Collection implements CollectionContainer {
         const promise = setDoc(newDoc, msg);
 
         let isSucess = false;
-        promise
+        await promise
             .then(() => {
                 isSucess = true;
             })
             .catch(() => {
                 isSucess = false;
             });
-
-        return isSucess;
     }
 
     get(): MessageInfo[] {
@@ -61,7 +60,7 @@ export default abstract class Collection implements CollectionContainer {
         return state;
     }
 
-    insertToProp(prop: Prop<MessageInfo[]>): boolean {
+    insertToProp(prop: Prop<MessageInfo[]>): void {
         const queryData: Query<DocumentData, DocumentData> = query(collection(this.firestore, this.id));
         const promise = getDocs(queryData);
 
@@ -81,11 +80,9 @@ export default abstract class Collection implements CollectionContainer {
                 isSucess = false;
                 Error(`Error : get ${this.id}collection`);
             });
-
-        return isSucess;
     }
 
-    onSnapshot(prop: Prop<MessageInfo[]>): boolean {
+    onSnapshot(prop: Prop<MessageInfo[]>) {
         const [, action] = prop;
 
         onSnapshot(collection(this.firestore, this.id), (snapShot: QuerySnapshot<DocumentData, DocumentData>) => {
@@ -99,7 +96,21 @@ export default abstract class Collection implements CollectionContainer {
                 action(ttweetArr as MessageInfo[]);
             }
         });
+    }
 
-        return true;
+    delete(message: MessageInfo) {
+        if (!message.id) return false;
+
+        let isSucess = false;
+
+        const docToBeDeleted = doc(collection(this.firestore, this.id), message.id);
+        const promise = deleteDoc(docToBeDeleted);
+        promise
+            .then(() => {
+                isSucess = true;
+            })
+            .catch(() => {
+                isSucess = false;
+            });
     }
 }

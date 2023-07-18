@@ -1,6 +1,6 @@
 import { MessageInfo } from '@/models/collectionContainer';
 import { AuthService } from '@/services/firebase/authService';
-import { DBService } from '@/services/firebase/dbService';
+import DeleteButton from './DeleteButton';
 
 type Prop = {
     ttweetObj: MessageInfo;
@@ -13,7 +13,7 @@ function Ttweet({ ttweetObj }: Prop): React.JSX.Element {
             {isOwner && (
                 <div>
                     <h4>{ttweetObj.text}</h4>
-                    <button>Delete Ttweet</button>
+                    <DeleteButton ttweetobj={ttweetObj} />
                     <button>Edit Ttweet</button>
                 </div>
             )}

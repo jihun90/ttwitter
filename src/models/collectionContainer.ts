@@ -16,8 +16,9 @@ export interface CollectionContainer {
     id: CollectionID;
     set(msg: MessageInfo): void;
     get(): MessageInfo[];
-    insertToProp(prop: Prop<MessageInfo[]>): boolean;
-    onSnapshot(prop: Prop<MessageInfo[]>): boolean;
+    insertToProp(prop: Prop<MessageInfo[]>): void;
+    onSnapshot(prop: Prop<MessageInfo[]>): void;
+    delete(message: MessageInfo): void;
 }
 
 export function isCollection(value: unknown): value is CollectionContainer {
