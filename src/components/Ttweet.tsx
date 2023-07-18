@@ -1,23 +1,41 @@
 import { MessageInfo } from '@/models/collectionContainer';
 import { AuthService } from '@/services/firebase/authService';
 import DeleteButton from './DeleteButton';
+import { useState } from 'react';
 
 type Prop = {
     ttweetObj: MessageInfo;
 };
 
 function Ttweet({ ttweetObj }: Prop): React.JSX.Element {
+    const [editting, setEditting] = useState(false);
+    const [newTtweet, setNewTtweet] = useState(ttweetObj.text);
+
+    const toggleEdtting = () => setEditting(pre => !pre);
+
     const isOwner: boolean = ttweetObj.createdBy === (AuthService.GetInstance().user?.uid ?? '');
     return (
-        <>
-            {isOwner && (
-                <div>
+        <div>
+            {editting ? (
+                <>
+                    <form>
+                        <input value={newTtweet} required />
+                    </form>
+                    <button onClick={toggleEdtting}>Cancel</button>
+                </>
+            ) : (
+                <>
                     <h4>{ttweetObj.text}</h4>
-                    <DeleteButton ttweetobj={ttweetObj} />
-                    <button>Edit Ttweet</button>
-                </div>
+                    {isOwner && (
+                        <div>
+                            <h4>{ttweetObj.text}</h4>
+                            <DeleteButton ttweetobj={ttweetObj} />
+                            <button onClick={toggleEdtting}>Edit Ttweet</button>
+                        </div>
+                    )}
+                </>
             )}
-        </>
+        </div>
     );
 }
 
