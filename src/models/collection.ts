@@ -110,7 +110,7 @@ export default abstract class Collection implements CollectionContainer {
                 isSucess = true;
             })
             .catch(() => {
-                isSucess = false;
+                Error(`Error : delete Message (message if : ${message.id ?? ''})`);
             });
     }
 }
