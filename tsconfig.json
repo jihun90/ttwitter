@@ -6,12 +6,6 @@
       "@/*": [
         "src/*"
       ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@routes/*": [
-        "src/routes/*"
-      ]
     },
     "useDefineForClassFields": true,
     "lib": [

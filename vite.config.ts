@@ -7,9 +7,7 @@ const config: UserConfigExport = {
     plugins: [react(), tsconfigPaths()],
     resolve: {
         alias: [
-            { find: "@", replacement: __dirname + "/src/" },
-            { find: "@components", replacement: __dirname + "/src/components/" },
-            { find: "@routes", replacement: __dirname + "/src/routes/" },
+            { find: "@", replacement: __dirname + "/src/" }
         ],
     },
 };

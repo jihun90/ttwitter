@@ -1,5 +1,5 @@
 import AuthInput from '@/components/Auth/AuthInput';
-import { FirebaseObject, UserCredential, AuthError } from '@/myFirebase';
+import { UserCredential, AuthError, AuthService } from '@/services/firebase/authService';
 import { useState } from 'react';
 import { SocialButton, SocialType } from '@/components/Auth/SocialButton';
 
@@ -11,21 +11,10 @@ function Auth(): React.JSX.Element {
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        let data: Promise<UserCredential>;
 
-        if (isNewAccount) {
-            data = FirebaseObject.GetInstance().Auth.CreateUser(email, password);
-        } else {
-            data = FirebaseObject.GetInstance().Auth.SignIn(email, password);
-        }
-
-        data.then((userCredential: UserCredential) => {
-            const user: UserCredential = userCredential;
-        }).catch((error: AuthError) => {
-            SetError(error.message);
-        });
-
-        console.log(data);
+        const [userCredential, errorMsg] = GetUserCredential(isNewAccount, email, password);
+        SetError(errorMsg);
+        console.log(userCredential);
     }
 
     const toggleAccount = () => setIsNewAccount((prev: boolean) => !prev);
@@ -45,6 +34,27 @@ function Auth(): React.JSX.Element {
             </div>
         </div>
     );
+}
+
+function GetUserCredential(isNewAccount: boolean, email: string, password: string): [UserCredential, string] {
+    let promise: Promise<UserCredential>;
+    if (isNewAccount) {
+        promise = AuthService.GetInstance().CreateUser(email, password);
+    } else {
+        promise = AuthService.GetInstance().SignIn(email, password);
+    }
+
+    let user = {} as UserCredential;
+    let errorMsg = '';
+    promise
+        .then((userCredential: UserCredential) => {
+            user = userCredential;
+        })
+        .catch((error: AuthError) => {
+            errorMsg = error.message;
+        });
+
+    return [user, errorMsg];
 }
 
 export default Auth;

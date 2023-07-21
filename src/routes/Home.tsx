@@ -1,34 +1,33 @@
-import { FirebaseObject, ttweetData } from '@/myFirebase';
+import { AuthService } from '@/services/firebase/authService';
+import { DBService } from '@/services/firebase/dbService';
+import { CollectionID, MessageInfo, isCollection } from '@/models/collectionContainer';
 import { useState, useEffect } from 'react';
+import Ttweet from '@/components/Ttweet';
 
 function Home(): React.JSX.Element {
     const [ttweet, setTtweet] = useState('');
-    const [ttweets, setTtweets] = useState<ttweetData[]>([]);
+    const [ttweets, setTtweets] = useState<MessageInfo[]>([]);
 
     useEffect(() => {
-        FirebaseObject.GetInstance()
-            .DB.getCollection()
-            .then((dbTtweets): void => {
-                dbTtweets.forEach(dbTtweet => {
-                    const data = dbTtweet.data() as ttweetData;
-                    data.id = dbTtweet.id;
-                    setTtweets(prev => [data, ...prev]);
-                });
-            })
-            .catch((): void => {
-                throw Error('DB.getCollection');
-            });
-    }, []);
+        const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
+        if (isCollection(collection)) {
+            collection.onSnapshot([ttweets, setTtweets]);
+        }
+    }, [ttweets]);
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
 
-        FirebaseObject.GetInstance()
-            .DB.setCollection(ttweet)
-            .then(() => setTtweet(''))
-            .catch((): void => {
-                throw Error('DB.setCollection');
-            });
+        const user = AuthService.GetInstance().user;
+        const uId: string = user?.uid ?? '';
+
+        const msg: MessageInfo = { text: ttweet, createdAt: Date.now(), createdBy: uId };
+        const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
+        if (isCollection(collection)) {
+            collection.set(msg);
+        }
+
+        setTtweet('');
     };
 
     const onChange = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -52,9 +51,7 @@ function Home(): React.JSX.Element {
             </form>
             <div>
                 {ttweets.map(ttweet => (
-                    <div key={ttweet.id}>
-                        <h4>{ttweet.msg}</h4>
-                    </div>
+                    <Ttweet ttweetObj={ttweet} />
                 ))}
             </div>
         </div>
