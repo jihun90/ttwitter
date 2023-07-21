@@ -19,6 +19,7 @@ export interface CollectionContainer {
     appendToProp(prop: Prop<MessageInfo[]>): void;
     onSnapshot(prop: Prop<MessageInfo[]>): void;
     delete(message: MessageInfo): void;
+    update(message: MessageInfo): void;
 }
 
 export function isCollection(value: unknown): value is CollectionContainer {

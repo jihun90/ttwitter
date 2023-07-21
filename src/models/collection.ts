@@ -10,6 +10,7 @@ import {
     QuerySnapshot,
     doc,
     deleteDoc,
+    updateDoc,
 } from 'firebase/firestore';
 import { CollectionContainer, CollectionID, MessageInfo, isMessageInfo, Prop } from './collectionContainer';
 
@@ -91,12 +92,22 @@ export default abstract class Collection implements CollectionContainer {
     }
 
     delete(message: MessageInfo) {
-        if (!message.id) return false;
+        if (!isMessageInfo(message)) return;
 
         const docToBeDeleted = doc(collection(this.firestore, this.id), message.id);
         const promise = deleteDoc(docToBeDeleted);
         promise.catch(() => {
             Error(`Error : delete Message (message if : ${message.id ?? ''})`);
+        });
+    }
+
+    update(message: MessageInfo): void {
+        if (!isMessageInfo(message)) return;
+
+        const newDoc = doc(collection(this.firestore, this.id), message.id);
+        const promise = updateDoc(newDoc, message);
+        promise.catch(() => {
+            Error(`Error : update Message (message if : ${message.id ?? ''})`);
         });
     }
 }
