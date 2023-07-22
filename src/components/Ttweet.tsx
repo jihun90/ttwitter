@@ -8,8 +8,6 @@ import { EdittingContext, SetEdittingContext } from '@/contexts/EdttingContext';
 function Ttweet() {
     const ttweet = useContext(TtweetContext);
     const editting = useContext(EdittingContext);
-    const setEditting = useContext(SetEdittingContext);
-    const toggleEdtting = () => setEditting(pre => !pre);
 
     const isOwner: boolean = ttweet.createdBy === (AuthService.GetInstance().user?.uid ?? '');
     if (isOwner) return <></>;
@@ -18,7 +16,7 @@ function Ttweet() {
         return (
             <>
                 <UpdateForm ttweetObj={ttweet} />
-                <button onClick={toggleEdtting}>Cancel</button>
+                <ToggleEdittingButton message="Cancel" />
             </>
         );
     };
@@ -28,12 +26,18 @@ function Ttweet() {
             <>
                 <h4>{ttweet.text}</h4>
                 <DeleteButton ttweetobj={ttweet} />
-                <button onClick={toggleEdtting}>Edit Ttweet</button>
+                <ToggleEdittingButton message="Edit Ttweet" />
             </>
         );
     };
 
     return <div>{editting ? <UpdateView /> : <DefualtView />}</div>;
+}
+
+function ToggleEdittingButton({ message }: { message: string }): React.JSX.Element {
+    const setEditting = useContext(SetEdittingContext);
+    const toggleEdtting = () => setEditting(pre => !pre);
+    return <button onClick={toggleEdtting}>{message}</button>;
 }
 
 export default Ttweet;
