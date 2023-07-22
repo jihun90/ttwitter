@@ -1,24 +1,23 @@
 import { AuthService } from '@/services/firebase/authService';
 import DeleteButton from '@/components/DeleteButton';
-import React, { useState } from 'react';
-import { MessageInfo } from '@/models/collectionContainer';
+import React, { useContext } from 'react';
 import UpdateForm from './UpdateForm';
+import { TtweetContext } from '@/routes/Home';
+import { EdittingContext, SetEdittingContext } from '@/contexts/EdttingContext';
 
-type Prop = {
-    ttweetObj: MessageInfo;
-};
-
-function Ttweet({ ttweetObj }: Prop): React.JSX.Element {
-    const [editting, setEditting] = useState(false);
+function Ttweet() {
+    const ttweet = useContext(TtweetContext);
+    const editting = useContext(EdittingContext);
+    const setEditting = useContext(SetEdittingContext);
     const toggleEdtting = () => setEditting(pre => !pre);
 
-    const isOwner: boolean = ttweetObj.createdBy === (AuthService.GetInstance().user?.uid ?? '');
+    const isOwner: boolean = ttweet.createdBy === (AuthService.GetInstance().user?.uid ?? '');
     if (isOwner) return <></>;
 
     const UpdateView = () => {
         return (
             <>
-                <UpdateForm ttweetObj={ttweetObj} />
+                <UpdateForm ttweetObj={ttweet} />
                 <button onClick={toggleEdtting}>Cancel</button>
             </>
         );
@@ -26,11 +25,11 @@ function Ttweet({ ttweetObj }: Prop): React.JSX.Element {
 
     const DefualtView = () => {
         return (
-            <div>
-                <h4>{ttweetObj.text}</h4>
-                <DeleteButton ttweetobj={ttweetObj} />
+            <>
+                <h4>{ttweet.text}</h4>
+                <DeleteButton ttweetobj={ttweet} />
                 <button onClick={toggleEdtting}>Edit Ttweet</button>
-            </div>
+            </>
         );
     };
 

@@ -1,8 +1,12 @@
 import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
 import { CollectionID, MessageInfo, isCollection } from '@/models/collectionContainer';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import Ttweet from '@/components/Ttweet';
+import { EdittingProvider } from '@/contexts/EdttingContext';
+import { TtweetProvider } from '@/contexts/TtweetContext';
+
+export const TtweetContext = createContext<MessageInfo>({ text: '', createdAt: 0, createdBy: '' });
 
 function Home(): React.JSX.Element {
     const [ttweet, setTtweet] = useState('');
@@ -51,7 +55,9 @@ function Home(): React.JSX.Element {
             </form>
             <div>
                 {ttweets.map(ttweet => (
-                    <Ttweet ttweetObj={ttweet} />
+                    <EdittingProvider>
+                        <TtweetProvider ttweet={ttweet} chidren={<Ttweet key={ttweet.id} />} />
+                    </EdittingProvider>
                 ))}
             </div>
         </div>
