@@ -2,10 +2,10 @@ import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
 import { CollectionID, MessageInfo, isCollection } from '@/models/collectionContainer';
 import { useState, useEffect, createContext } from 'react';
-import Ttweet from '@/components/Ttweet';
+import Ttweet from '@/components/Ttweet/Ttweet';
 import { EdittingProvider } from '@/contexts/EdttingContext';
 import { TtweetProvider } from '@/contexts/TtweetContext';
-import { PreviewForm } from '@/components/PreviewForm';
+import { PreviewForm } from '@/components/Ttweet/PreviewForm';
 
 export const TtweetContext = createContext<MessageInfo>({ text: '', createdAt: 0, createdBy: '' });
 
