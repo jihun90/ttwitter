@@ -10,7 +10,7 @@ function Ttweet() {
     const editting = useContext(EdittingContext);
 
     const isOwner: boolean = ttweet.createdBy === (AuthService.GetInstance().user?.uid ?? '');
-    if (isOwner) return <></>;
+    if (!isOwner) return <></>;
 
     const UpdateView = () => {
         return (

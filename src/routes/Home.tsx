@@ -5,6 +5,7 @@ import { useState, useEffect, createContext } from 'react';
 import Ttweet from '@/components/Ttweet';
 import { EdittingProvider } from '@/contexts/EdttingContext';
 import { TtweetProvider } from '@/contexts/TtweetContext';
+import { PreviewForm } from '@/components/PreviewForm';
 
 export const TtweetContext = createContext<MessageInfo>({ text: '', createdAt: 0, createdBy: '' });
 
@@ -53,10 +54,11 @@ function Home(): React.JSX.Element {
                 />
                 <input type="submit" value="ttweet" />
             </form>
+            <PreviewForm />
             <div>
                 {ttweets.map(ttweet => (
-                    <EdittingProvider>
-                        <TtweetProvider ttweet={ttweet} chidren={<Ttweet key={ttweet.id} />} />
+                    <EdittingProvider key={ttweet.id}>
+                        <TtweetProvider key={ttweet.id} ttweet={ttweet} chidren={<Ttweet key={ttweet.id} />} />
                     </EdittingProvider>
                 ))}
             </div>
