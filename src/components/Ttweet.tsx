@@ -1,40 +1,43 @@
 import { AuthService } from '@/services/firebase/authService';
 import DeleteButton from '@/components/DeleteButton';
-import React, { useState } from 'react';
-import { MessageInfo } from '@/models/collectionContainer';
+import React, { useContext } from 'react';
 import UpdateForm from './UpdateForm';
+import { TtweetContext } from '@/routes/Home';
+import { EdittingContext, SetEdittingContext } from '@/contexts/EdttingContext';
 
-type Prop = {
-    ttweetObj: MessageInfo;
-};
+function Ttweet() {
+    const ttweet = useContext(TtweetContext);
+    const editting = useContext(EdittingContext);
 
-function Ttweet({ ttweetObj }: Prop): React.JSX.Element {
-    const [editting, setEditting] = useState(false);
-    const toggleEdtting = () => setEditting(pre => !pre);
-
-    const isOwner: boolean = ttweetObj.createdBy === (AuthService.GetInstance().user?.uid ?? '');
+    const isOwner: boolean = ttweet.createdBy === (AuthService.GetInstance().user?.uid ?? '');
     if (isOwner) return <></>;
 
     const UpdateView = () => {
         return (
             <>
-                <UpdateForm ttweetObj={ttweetObj} />
-                <button onClick={toggleEdtting}>Cancel</button>
+                <UpdateForm ttweetObj={ttweet} />
+                <ToggleEdittingButton message="Cancel" />
             </>
         );
     };
 
     const DefualtView = () => {
         return (
-            <div>
-                <h4>{ttweetObj.text}</h4>
-                <DeleteButton ttweetobj={ttweetObj} />
-                <button onClick={toggleEdtting}>Edit Ttweet</button>
-            </div>
+            <>
+                <h4>{ttweet.text}</h4>
+                <DeleteButton ttweetobj={ttweet} />
+                <ToggleEdittingButton message="Edit Ttweet" />
+            </>
         );
     };
 
     return <div>{editting ? <UpdateView /> : <DefualtView />}</div>;
+}
+
+function ToggleEdittingButton({ message }: { message: string }): React.JSX.Element {
+    const setEditting = useContext(SetEdittingContext);
+    const toggleEdtting = () => setEditting(pre => !pre);
+    return <button onClick={toggleEdtting}>{message}</button>;
 }
 
 export default Ttweet;
