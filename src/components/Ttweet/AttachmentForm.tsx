@@ -2,8 +2,7 @@ import { CollectionID, MessageInfo } from '@/models/collectionContainer';
 import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
 import { StorageService } from '@/services/firebase/storageService';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { AttachmentPreview } from './AttachmentPreview';
+import { useContext, useEffect, useRef } from 'react';
 import { AttachmentContext, SetattachmentContext } from '@/contexts/AttachmentContext';
 
 export function AttachmentForm() {
@@ -54,12 +53,9 @@ export function AttachmentForm() {
     }
 
     return (
-        <>
-            <AttachmentPreview />
-            <form onSubmit={onUpload}>
-                <input ref={imageInput} type="file" accept="image/*" onChange={onFileChanged} />
-                <input type="submit" value="Upload" />
-            </form>
-        </>
+        <form onSubmit={onUpload}>
+            <input ref={imageInput} type="file" accept="image/*" onChange={onFileChanged} />
+            <input type="submit" value="Upload" />
+        </form>
     );
 }
