@@ -5,13 +5,15 @@ import { useState, useEffect, createContext } from 'react';
 import Ttweet from '@/components/Ttweet/Ttweet';
 import { EdittingProvider } from '@/contexts/EdttingContext';
 import { TtweetProvider } from '@/contexts/TtweetContext';
-import { PreviewForm } from '@/components/Ttweet/PreviewForm';
+import { AttachmentForm } from '@/components/Ttweet/AttachmentForm';
+import { AttachmentProvider } from '@/contexts/AttachmentContext';
 
 export const TtweetContext = createContext<MessageInfo>({ text: '', createdAt: 0, createdBy: '' });
 
 function Home(): React.JSX.Element {
     const [ttweet, setTtweet] = useState('');
     const [ttweets, setTtweets] = useState<MessageInfo[]>([]);
+    const [attachment, setAttachment] = useState('');
 
     useEffect(() => {
         const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
@@ -54,7 +56,9 @@ function Home(): React.JSX.Element {
                 />
                 <input type="submit" value="ttweet" />
             </form>
-            <PreviewForm />
+            <AttachmentProvider>
+                <AttachmentForm />
+            </AttachmentProvider>
             <div>
                 {ttweets.map(ttweet => (
                     <EdittingProvider key={ttweet.id}>

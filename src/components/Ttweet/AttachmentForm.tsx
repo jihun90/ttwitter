@@ -2,18 +2,20 @@ import { CollectionID, MessageInfo } from '@/models/collectionContainer';
 import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
 import { StorageService } from '@/services/firebase/storageService';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { AttachmentPreview } from './AttachmentPreview';
+import { AttachmentContext, SetattachmentContext } from '@/contexts/AttachmentContext';
 
-export function PreviewForm() {
-    const [attachment, setAttachment] = useState('');
+export function AttachmentForm() {
+    const attachment = useContext(AttachmentContext);
+    const setAttachment = useContext(SetattachmentContext);
     const imageInput = useRef<HTMLInputElement>(null);
-    const onClear = () => setAttachment('');
 
     useEffect(() => {
         if (attachment != '') return;
-        if (imageInput.current?.value) {
-            imageInput.current.value = '';
-        }
+        if (!imageInput.current?.value) return;
+
+        imageInput.current.value = '';
     }, [attachment]);
 
     const onFileChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,12 +23,13 @@ export function PreviewForm() {
         if (!files) return;
 
         const reader: FileReader = new FileReader();
+
         reader.onloadend = (finishedEvent): void => {
             const image = finishedEvent.target?.result;
-            if (typeof image === 'string') {
-                setAttachment(image);
-            }
+            if (typeof image != 'string') return;
+            setAttachment(image);
         };
+
         reader.readAsDataURL(files[0]);
     };
 
@@ -51,15 +54,12 @@ export function PreviewForm() {
     }
 
     return (
-        <form onSubmit={onUpload}>
-            <input ref={imageInput} type="file" accept="image/*" onChange={onFileChanged} />
-            {attachment != '' && (
-                <div>
-                    <img src={attachment} width="50px" height="50px" />
-                    <button onClick={onClear}>Clear</button>
-                </div>
-            )}
-            <input type="submit" value="Upload" />
-        </form>
+        <>
+            <AttachmentPreview attachmentProp={[attachment, setAttachment]} />
+            <form onSubmit={onUpload}>
+                <input ref={imageInput} type="file" accept="image/*" onChange={onFileChanged} />
+                <input type="submit" value="Upload" />
+            </form>
+        </>
     );
 }

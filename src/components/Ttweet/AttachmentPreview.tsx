@@ -1,11 +1,10 @@
-import { SetStateAction } from 'react';
+import { AttachmentContext, SetattachmentContext } from '@/contexts/AttachmentContext';
+import { useContext } from 'react';
 
-type Props = {
-    attachmentProp: [string, React.Dispatch<SetStateAction<string>>];
-};
+export function AttachmentPreview() {
+    const attachment = useContext(AttachmentContext);
+    const setAttachment = useContext(SetattachmentContext);
 
-export function AttachmentPreview({ attachmentProp }: Props) {
-    const [attachment, setAttachment] = attachmentProp;
     if (attachment == '') return <></>;
     const onClear = () => setAttachment('');
 
