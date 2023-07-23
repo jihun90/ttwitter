@@ -1,4 +1,4 @@
-import { FirebaseStorage, getStorage, ref, uploadString } from 'firebase/storage';
+import { FirebaseStorage, getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
 import { App } from './appService';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -19,16 +19,14 @@ class StorageService {
         return StorageService.sInstance;
     }
 
-    put(uid: string, srcProp: Prop<string>) {
-        const [srcImage, setSrcImage] = srcProp;
+    async put(uid: string, srcImage: string) {
         const reference = ref(this.storageService, `${uid}/${uuidv4()}`);
-        console.log(reference);
-        const promise = uploadString(reference, srcImage, 'data_url');
-        promise
-            .then(() => setSrcImage(''))
-            .catch(() => {
-                throw Error(`can not upload Image ${srcImage}`);
-            });
+        return uploadString(reference, srcImage, 'data_url');
+    }
+
+    async get(url: string) {
+        const reference = ref(this.storageService, url);
+        return await getDownloadURL(reference);
     }
 }
 

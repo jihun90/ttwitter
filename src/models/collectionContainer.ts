@@ -1,6 +1,6 @@
 import Collection from './collection';
 
-export type MessageInfo = { id?: string; text: string; createdAt: number; createdBy: string };
+export type MessageInfo = { id?: string; text: string; createdAt: number; createdBy: string; attachment?: string };
 export function isMessageInfo(data: unknown): data is MessageInfo {
     return (data as MessageInfo).id != undefined;
 }

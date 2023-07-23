@@ -1,4 +1,6 @@
+import { CollectionID, MessageInfo } from '@/models/collectionContainer';
 import { AuthService } from '@/services/firebase/authService';
+import { DBService } from '@/services/firebase/dbService';
 import { StorageService } from '@/services/firebase/storageService';
 import { useEffect, useRef, useState } from 'react';
 
@@ -28,14 +30,25 @@ export function PreviewForm() {
         reader.readAsDataURL(files[0]);
     };
 
-    const onUpload = (event: React.FormEvent<HTMLFormElement>) => {
+    function onUpload(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const uid = AuthService.GetInstance().user;
-        if (attachment === '') return;
-        if (!uid) return;
-        StorageService.GetInstance().put(uid.uid, [attachment, setAttachment]);
-    };
+        async () => {
+            if (attachment === '') return;
+
+            const uid = AuthService.GetInstance().user;
+            if (!uid) return;
+
+            const result = await StorageService.GetInstance().put(uid.uid, attachment);
+            if (!result) return;
+
+            const url = await StorageService.GetInstance().get(result.ref.fullPath);
+
+            const msg: MessageInfo = { text: '', createdAt: 0, createdBy: '', attachment: url };
+            const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
+            collection.set(msg);
+        };
+    }
 
     return (
         <form onSubmit={onUpload}>
