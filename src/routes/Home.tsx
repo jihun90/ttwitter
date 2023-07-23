@@ -70,14 +70,13 @@ function SubmitButton() {
     const attachment = useContext(AttachmentContext);
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-        event.preventDefault();
-
-        const user = AuthService.GetInstance().user;
-        const uId: string = user?.uid ?? '';
-
         async () => {
+            event.preventDefault();
+            const user = AuthService.GetInstance().user;
+            const uId: string = user?.uid ?? '';
             const url = await getUrl(attachment);
-            if (ttweet && url) return;
+
+            if (!ttweet && !url) return;
             if (ttweet === '' && url === '') return;
 
             const msg: MessageInfo = { text: ttweet, createdAt: Date.now(), createdBy: uId, attachment: url };

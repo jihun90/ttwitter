@@ -24,10 +24,8 @@ function Ttweet() {
     const DefualtView = () => {
         return (
             <>
-                {ttweet.attachment && ttweet.attachment != '' && (
-                    <img src={ttweet.attachment} width="100px" height="100px" />
-                )}
-                {ttweet.text && ttweet.text != '' && <h4>{ttweet.text}</h4>}
+                {ttweet.attachment && <img src={ttweet.attachment} width="100px" height="100px" />}
+                {ttweet.text && <h4>{ttweet.text}</h4>}
                 <DeleteButton ttweetobj={ttweet} />
                 <ToggleEdittingButton message="Edit Ttweet" />
             </>
