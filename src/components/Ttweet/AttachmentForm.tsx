@@ -55,7 +55,7 @@ export function AttachmentForm() {
 
     return (
         <>
-            <AttachmentPreview attachmentProp={[attachment, setAttachment]} />
+            <AttachmentPreview />
             <form onSubmit={onUpload}>
                 <input ref={imageInput} type="file" accept="image/*" onChange={onFileChanged} />
                 <input type="submit" value="Upload" />
