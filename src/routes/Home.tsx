@@ -1,15 +1,14 @@
 import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
 import { CollectionID, MessageInfo, isCollection } from '@/models/collectionContainer';
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Ttweet from '@/components/Ttweet/Ttweet';
 import { EdittingProvider } from '@/contexts/EdttingContext';
 import { TtweetProvider } from '@/contexts/TtweetContext';
 import { AttachmentForm } from '@/components/Ttweet/AttachmentForm';
 import { AttachmentProvider } from '@/contexts/AttachmentContext';
 import { AttachmentPreview } from '@/components/Ttweet/AttachmentPreview';
-
-export const TtweetContext = createContext<MessageInfo>({ text: '', createdAt: 0, createdBy: '' });
+import { InputProvider, SetTextContext, SetUrlContext, TextContext, UrlContext } from '@/contexts/InputTtweetContext';
 
 function Home(): React.JSX.Element {
     const [ttweets, setTtweets] = useState<MessageInfo[]>([]);
@@ -22,8 +21,7 @@ function Home(): React.JSX.Element {
 
     return (
         <div>
-            <InputFormView />
-            <AttachmentView />
+            <InputView />
             <div>
                 {ttweets.map(ttweet => (
                     <EdittingProvider key={ttweet.id}>
@@ -35,31 +33,32 @@ function Home(): React.JSX.Element {
     );
 }
 
-function AttachmentView() {
+function InputView() {
+    return (
+        <InputProvider>
+            <div>
+                <TextFormView />
+                <AttachmentFormView />
+                <SubmitButton />
+            </div>
+        </InputProvider>
+    );
+}
+
+function AttachmentFormView() {
     return (
         <AttachmentProvider>
             <div>
-                <AttachmentPreview />
                 <AttachmentForm />
+                <AttachmentPreview />
             </div>
         </AttachmentProvider>
     );
 }
 
-function InputFormView() {
-    const [ttweet, setTtweet] = useState('');
-    const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-        event.preventDefault();
-
-        const user = AuthService.GetInstance().user;
-        const uId: string = user?.uid ?? '';
-
-        const msg: MessageInfo = { text: ttweet, createdAt: Date.now(), createdBy: uId };
-        const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
-        if (!isCollection(collection)) return;
-        collection.set(msg);
-        setTtweet('');
-    };
+function TextFormView() {
+    const ttweet = useContext(TextContext);
+    const setTtweet = useContext(SetTextContext);
 
     const onChange = (event: React.FormEvent<HTMLInputElement>): void => {
         const value = event.currentTarget?.value;
@@ -67,9 +66,34 @@ function InputFormView() {
         setTtweet(value);
     };
 
+    return <input value={ttweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />;
+}
+
+function SubmitButton() {
+    const ttweet = useContext(TextContext);
+    const setTtweet = useContext(SetTextContext);
+
+    const url = useContext(UrlContext);
+    const setUrl = useContext(SetUrlContext);
+
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+        event.preventDefault();
+
+        const user = AuthService.GetInstance().user;
+        const uId: string = user?.uid ?? '';
+
+        if (ttweet === '' && url === '') return;
+
+        const msg: MessageInfo = { text: ttweet, createdAt: Date.now(), createdBy: uId, attachment: url };
+
+        const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
+        if (!isCollection(collection)) return;
+        collection.set(msg);
+        setTtweet('');
+        setUrl('');
+    };
     return (
         <form onSubmit={onSubmit}>
-            <input value={ttweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />
             <input type="submit" value="ttweet" />
         </form>
     );

@@ -2,8 +2,8 @@ import { AuthService } from '@/services/firebase/authService';
 import DeleteButton from '@/components/Ttweet/DeleteButton';
 import React, { useContext } from 'react';
 import UpdateForm from '@/components/Ttweet/UpdateForm';
-import { TtweetContext } from '@/routes/Home';
 import { EdittingContext, SetEdittingContext } from '@/contexts/EdttingContext';
+import { TtweetContext } from '@/contexts/TtweetContext';
 
 function Ttweet() {
     const ttweet = useContext(TtweetContext);

@@ -77,18 +77,21 @@ export default abstract class Collection implements CollectionContainer {
 
     onSnapshot(prop: Prop<MessageInfo[]>) {
         const [, action] = prop;
+        const curCollection = collection(this.firestore, this.id);
 
-        onSnapshot(collection(this.firestore, this.id), (snapShot: QuerySnapshot<DocumentData, DocumentData>) => {
+        const onNext = (snapShot: QuerySnapshot<DocumentData, DocumentData>) => {
             const ttweetArr = snapShot.docs.map(snapShot => {
                 const messageInfo = snapShot.data();
-                if (isMessageInfo(messageInfo)) {
-                    return messageInfo;
-                }
+                if (!isMessageInfo(messageInfo)) return;
+                return messageInfo;
             });
+
             if (ttweetArr.length > 0) {
                 action(ttweetArr as MessageInfo[]);
             }
-        });
+        };
+
+        onSnapshot(curCollection, onNext);
     }
 
     delete(message: MessageInfo) {
