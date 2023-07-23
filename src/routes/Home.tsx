@@ -69,12 +69,14 @@ function SubmitButton() {
     const setUrl = useContext(SetUrlContext);
     const attachment = useContext(AttachmentContext);
 
-    const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-        async () => {
-            event.preventDefault();
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const promise = getUrl(attachment);
+
+        void promise.then(url => {
             const user = AuthService.GetInstance().user;
             const uId: string = user?.uid ?? '';
-            const url = await getUrl(attachment);
 
             if (!ttweet && !url) return;
             if (ttweet === '' && url === '') return;
@@ -86,7 +88,7 @@ function SubmitButton() {
             collection.set(msg);
             setTtweet('');
             setUrl('');
-        };
+        });
     };
     return (
         <form onSubmit={onSubmit}>
@@ -96,17 +98,17 @@ function SubmitButton() {
 }
 
 async function getUrl(attachment: string) {
-    if (attachment === '') return;
+    if (attachment === '') return '';
 
     const uid = AuthService.GetInstance().user;
-    if (!uid) return;
+    if (!uid) return '';
 
     const result = await StorageService.GetInstance().put(uid.uid, attachment);
-    if (!result) return;
+    if (!result) return '';
 
     const url = await StorageService.GetInstance().get(result.ref.fullPath);
 
-    if (!url) return;
+    if (!url) return '';
     return url;
 }
 

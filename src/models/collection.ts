@@ -22,14 +22,14 @@ export default abstract class Collection implements CollectionContainer {
         this.firestore = firestore;
     }
 
-    async set(msg: MessageInfo) {
+    set(msg: MessageInfo) {
         const newDoc = doc(collection(this.firestore, this.id));
         if (!msg.id) {
             msg.id = newDoc.id;
         }
         const promise = setDoc(newDoc, msg);
 
-        await promise.catch(() => {
+        promise.catch(() => {
             Error(`Error : set ${this.id} collection`);
         });
     }
@@ -79,7 +79,7 @@ export default abstract class Collection implements CollectionContainer {
         const [, action] = prop;
         const curCollection = collection(this.firestore, this.id);
 
-        const onNext = (snapShot: QuerySnapshot<DocumentData, DocumentData>) => {
+        onSnapshot(curCollection, (snapShot: QuerySnapshot<DocumentData, DocumentData>) => {
             const ttweetArr = snapShot.docs.map(snapShot => {
                 const messageInfo = snapShot.data();
                 if (!isMessageInfo(messageInfo)) return;
@@ -89,9 +89,7 @@ export default abstract class Collection implements CollectionContainer {
             if (ttweetArr.length > 0) {
                 action(ttweetArr as MessageInfo[]);
             }
-        };
-
-        onSnapshot(curCollection, onNext);
+        });
     }
 
     delete(message: MessageInfo) {
