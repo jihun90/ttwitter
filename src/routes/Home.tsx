@@ -1,7 +1,7 @@
 import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
 import { CollectionID, MessageInfo, isCollection } from '@/models/collectionContainer';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Ttweet from '@/components/Ttweet/Ttweet';
 import { EdittingProvider } from '@/contexts/EdttingContext';
 import { TtweetProvider } from '@/contexts/TtweetContext';
@@ -16,9 +16,11 @@ function Home(): React.JSX.Element {
 
     useEffect(() => {
         const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
-        if (!isCollection(collection)) return;
-        collection.onSnapshot([ttweets, setTtweets]);
-    }, [ttweets]);
+        if (isCollection(collection)) {
+            const ttweetArr = collection.onSnapshot();
+            setTtweets(ttweetArr);
+        }
+    }, []);
 
     return (
         <div>

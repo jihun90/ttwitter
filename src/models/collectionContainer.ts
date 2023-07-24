@@ -17,7 +17,7 @@ export interface CollectionContainer {
     set(msg: MessageInfo): void;
     get(): MessageInfo[];
     appendToProp(prop: Prop<MessageInfo[]>): void;
-    onSnapshot(prop: Prop<MessageInfo[]>): void;
+    onSnapshot(): MessageInfo[];
     delete(message: MessageInfo): void;
     update(message: MessageInfo): void;
 }
