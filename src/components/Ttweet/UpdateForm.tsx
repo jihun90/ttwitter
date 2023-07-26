@@ -1,12 +1,14 @@
+import { SetEdittingContext } from '@/contexts/EdttingContext';
 import { CollectionID, MessageInfo } from '@/models/collectionContainer';
 import { AuthService } from '@/services/firebase/authService';
 import { DBService } from '@/services/firebase/dbService';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 type Prop = { ttweetObj: MessageInfo };
 
 export default function UpdateForm({ ttweetObj }: Prop) {
     const [newTtweet, setNewTtweet] = useState(ttweetObj.text);
+    const setEditting = useContext(SetEdittingContext);
 
     const onChange = (event: React.FormEvent<HTMLInputElement>) => {
         const {
@@ -20,6 +22,7 @@ export default function UpdateForm({ ttweetObj }: Prop) {
         const userId = AuthService.GetInstance().user?.uid ?? '';
         const ttweet: MessageInfo = { id: ttweetObj.id, text: newTtweet, createdAt: Date.now(), createdBy: userId };
         DBService.GetInstance().Collection[CollectionID.ttweet].update(ttweet);
+        setEditting(pre => !pre);
     };
 
     return (

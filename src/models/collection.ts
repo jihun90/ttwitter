@@ -7,12 +7,19 @@ import {
     Query,
     query,
     onSnapshot,
-    QuerySnapshot,
     doc,
     deleteDoc,
     updateDoc,
+    QuerySnapshot,
 } from 'firebase/firestore';
-import { CollectionContainer, CollectionID, MessageInfo, isMessageInfo, Prop } from './collectionContainer';
+import {
+    CollectionContainer,
+    CollectionID,
+    MessageInfo,
+    isMessageInfo,
+    Prop,
+    QuerySnapshotAction,
+} from '@/models/collectionContainer';
 
 export default abstract class Collection implements CollectionContainer {
     public abstract id: CollectionID;
@@ -22,14 +29,14 @@ export default abstract class Collection implements CollectionContainer {
         this.firestore = firestore;
     }
 
-    async set(msg: MessageInfo) {
+    set(msg: MessageInfo) {
         const newDoc = doc(collection(this.firestore, this.id));
         if (!msg.id) {
             msg.id = newDoc.id;
         }
         const promise = setDoc(newDoc, msg);
 
-        await promise.catch(() => {
+        promise.catch(() => {
             Error(`Error : set ${this.id} collection`);
         });
     }
@@ -75,20 +82,11 @@ export default abstract class Collection implements CollectionContainer {
             });
     }
 
-    onSnapshot(prop: Prop<MessageInfo[]>) {
-        const [, action] = prop;
-
-        onSnapshot(collection(this.firestore, this.id), (snapShot: QuerySnapshot<DocumentData, DocumentData>) => {
-            const ttweetArr = snapShot.docs.map(snapShot => {
-                const messageInfo = snapShot.data();
-                if (isMessageInfo(messageInfo)) {
-                    return messageInfo;
-                }
-            });
-            if (ttweetArr.length > 0) {
-                action(ttweetArr as MessageInfo[]);
-            }
-        });
+    onSnapshot(onNext: QuerySnapshotAction): MessageInfo[] {
+        const ttweets: MessageInfo[] = [] as MessageInfo[];
+        const curCollection = collection(this.firestore, this.id);
+        onSnapshot(curCollection, onNext);
+        return ttweets;
     }
 
     delete(message: MessageInfo) {
@@ -111,3 +109,5 @@ export default abstract class Collection implements CollectionContainer {
         });
     }
 }
+
+export type { QuerySnapshot, DocumentData };

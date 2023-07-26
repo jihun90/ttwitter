@@ -1,16 +1,16 @@
 import { AuthService } from '@/services/firebase/authService';
-import DeleteButton from '@/components/DeleteButton';
+import DeleteButton from '@/components/Ttweet/DeleteButton';
 import React, { useContext } from 'react';
-import UpdateForm from './UpdateForm';
-import { TtweetContext } from '@/routes/Home';
+import UpdateForm from '@/components/Ttweet/UpdateForm';
 import { EdittingContext, SetEdittingContext } from '@/contexts/EdttingContext';
+import { TtweetContext } from '@/contexts/TtweetContext';
 
 function Ttweet() {
     const ttweet = useContext(TtweetContext);
     const editting = useContext(EdittingContext);
 
     const isOwner: boolean = ttweet.createdBy === (AuthService.GetInstance().user?.uid ?? '');
-    if (isOwner) return <></>;
+    if (!isOwner) return <></>;
 
     const UpdateView = () => {
         return (
@@ -24,7 +24,8 @@ function Ttweet() {
     const DefualtView = () => {
         return (
             <>
-                <h4>{ttweet.text}</h4>
+                {ttweet.attachment && <img src={ttweet.attachment} width="100px" height="100px" />}
+                {ttweet.text && <h4>{ttweet.text}</h4>}
                 <DeleteButton ttweetobj={ttweet} />
                 <ToggleEdittingButton message="Edit Ttweet" />
             </>
