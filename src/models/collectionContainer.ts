@@ -1,4 +1,4 @@
-import Collection from './collection';
+import Collection, { QuerySnapshot, DocumentData } from '@/models/collection';
 
 export type MessageInfo = { id?: string; text: string; createdAt: number; createdBy: string; attachment?: string };
 export function isMessageInfo(data: unknown): data is MessageInfo {
@@ -7,6 +7,8 @@ export function isMessageInfo(data: unknown): data is MessageInfo {
 
 export type Action<T> = (value: T) => void;
 export type Prop<T> = [T, Action<T>];
+export type QuerySnapshotState = QuerySnapshot<DocumentData, DocumentData>;
+export type QuerySnapshotAction = Action<QuerySnapshot<DocumentData, DocumentData>>;
 
 export type CollectionDictionary = {
     [id: string]: CollectionContainer;
@@ -17,7 +19,7 @@ export interface CollectionContainer {
     set(msg: MessageInfo): void;
     get(): MessageInfo[];
     appendToProp(prop: Prop<MessageInfo[]>): void;
-    onSnapshot(): MessageInfo[];
+    onSnapshot(onNext: QuerySnapshotAction): MessageInfo[];
     delete(message: MessageInfo): void;
     update(message: MessageInfo): void;
 }

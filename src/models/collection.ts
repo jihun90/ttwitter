@@ -7,12 +7,19 @@ import {
     Query,
     query,
     onSnapshot,
-    QuerySnapshot,
     doc,
     deleteDoc,
     updateDoc,
+    QuerySnapshot,
 } from 'firebase/firestore';
-import { CollectionContainer, CollectionID, MessageInfo, isMessageInfo, Prop } from './collectionContainer';
+import {
+    CollectionContainer,
+    CollectionID,
+    MessageInfo,
+    isMessageInfo,
+    Prop,
+    QuerySnapshotAction,
+} from '@/models/collectionContainer';
 
 export default abstract class Collection implements CollectionContainer {
     public abstract id: CollectionID;
@@ -75,19 +82,11 @@ export default abstract class Collection implements CollectionContainer {
             });
     }
 
-    onSnapshot(): MessageInfo[] {
-        //onSnapshot 변경될때만 누군가 호출해줌..!
+    onSnapshot(onNext: QuerySnapshotAction): MessageInfo[] {
+        const ttweets: MessageInfo[] = [] as MessageInfo[];
         const curCollection = collection(this.firestore, this.id);
-        const ttweetArr: MessageInfo[] = [];
-        onSnapshot(curCollection, (snapShot: QuerySnapshot<DocumentData, DocumentData>) => {
-            for (const item of snapShot.docs) {
-                const messageInfo = item.data();
-                if (isMessageInfo(messageInfo)) {
-                    ttweetArr.push(messageInfo);
-                }
-            }
-        });
-        return ttweetArr;
+        onSnapshot(curCollection, onNext);
+        return ttweets;
     }
 
     delete(message: MessageInfo) {
@@ -110,3 +109,5 @@ export default abstract class Collection implements CollectionContainer {
         });
     }
 }
+
+export type { QuerySnapshot, DocumentData };
