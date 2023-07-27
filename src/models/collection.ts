@@ -20,6 +20,7 @@ import {
     Prop,
     QuerySnapshotAction,
 } from '@/models/collectionContainer';
+import { ref } from 'firebase/storage';
 
 export default abstract class Collection implements CollectionContainer {
     public abstract id: CollectionID;
@@ -89,14 +90,11 @@ export default abstract class Collection implements CollectionContainer {
         return ttweets;
     }
 
-    delete(message: MessageInfo) {
+    async delete(message: MessageInfo) {
         if (!isMessageInfo(message)) return;
 
         const docToBeDeleted = doc(collection(this.firestore, this.id), message.id);
-        const promise = deleteDoc(docToBeDeleted);
-        promise.catch(() => {
-            Error(`Error : delete Message (message if : ${message.id ?? ''})`);
-        });
+        return deleteDoc(docToBeDeleted);
     }
 
     update(message: MessageInfo): void {

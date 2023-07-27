@@ -20,7 +20,7 @@ export interface CollectionContainer {
     get(): MessageInfo[];
     appendToProp(prop: Prop<MessageInfo[]>): void;
     onSnapshot(onNext: QuerySnapshotAction): MessageInfo[];
-    delete(message: MessageInfo): void;
+    delete(message: MessageInfo): Promise<void>;
     update(message: MessageInfo): void;
 }
 
