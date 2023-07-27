@@ -1,5 +1,6 @@
 import { CollectionID, MessageInfo, isCollection } from '@/models/collectionContainer';
 import { DBService } from '@/services/firebase/dbService';
+import { StorageService } from '@/services/firebase/storageService';
 
 type Prop = {
     ttweetobj: MessageInfo;
@@ -11,7 +12,15 @@ export default function DeleteButton({ ttweetobj }: Prop) {
         if (ok) {
             const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
             if (isCollection(collection)) {
-                collection.delete(ttweetobj);
+                const url: string = ttweetobj.attachment ?? '';
+
+                StorageService.GetInstance()
+                    .delete(url)
+                    .catch(() => Error(`Error : delete Message (message if : ${url ?? 'unknown'})`));
+
+                collection
+                    .delete(ttweetobj)
+                    .catch(() => Error(`Error : delete Message (message if : ${ttweetobj.id ?? 'unknown'})`));
             }
         }
     }

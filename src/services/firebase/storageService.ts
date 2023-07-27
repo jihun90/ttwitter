@@ -1,4 +1,4 @@
-import { FirebaseStorage, getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
+import { FirebaseStorage, deleteObject, getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
 import { App } from './appService';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -27,6 +27,12 @@ class StorageService {
     async get(url: string) {
         const reference = ref(this.storageService, url);
         return await getDownloadURL(reference);
+    }
+
+    async delete(url: string) {
+        if (url === '' || !url) return;
+        const reference = ref(this.storageService, url);
+        return deleteObject(reference);
     }
 }
 

@@ -21,7 +21,10 @@ export default function UpdateForm({ ttweetObj }: Prop) {
         event.preventDefault();
         const userId = AuthService.GetInstance().user?.uid ?? '';
         const ttweet: MessageInfo = { id: ttweetObj.id, text: newTtweet, createdAt: Date.now(), createdBy: userId };
-        DBService.GetInstance().Collection[CollectionID.ttweet].update(ttweet);
+        const promise = DBService.GetInstance().Collection[CollectionID.ttweet].update(ttweet);
+        promise.catch(() => {
+            Error(`Error : update Message (message if : ${ttweet.id ?? ''})`);
+        });
         setEditting(pre => !pre);
     };
 
