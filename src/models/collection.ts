@@ -20,7 +20,6 @@ import {
     Prop,
     QuerySnapshotAction,
 } from '@/models/collectionContainer';
-import { ref } from 'firebase/storage';
 
 export default abstract class Collection implements CollectionContainer {
     public abstract id: CollectionID;
@@ -30,16 +29,12 @@ export default abstract class Collection implements CollectionContainer {
         this.firestore = firestore;
     }
 
-    set(msg: MessageInfo) {
+    async set(msg: MessageInfo) {
         const newDoc = doc(collection(this.firestore, this.id));
         if (!msg.id) {
             msg.id = newDoc.id;
         }
-        const promise = setDoc(newDoc, msg);
-
-        promise.catch(() => {
-            Error(`Error : set ${this.id} collection`);
-        });
+        return setDoc(newDoc, msg);
     }
 
     get(): MessageInfo[] {
@@ -97,14 +92,11 @@ export default abstract class Collection implements CollectionContainer {
         return deleteDoc(docToBeDeleted);
     }
 
-    update(message: MessageInfo): void {
+    async update(message: MessageInfo): Promise<void> {
         if (!isMessageInfo(message)) return;
 
         const newDoc = doc(collection(this.firestore, this.id), message.id);
-        const promise = updateDoc(newDoc, message);
-        promise.catch(() => {
-            Error(`Error : update Message (message if : ${message.id ?? ''})`);
-        });
+        return updateDoc(newDoc, message);
     }
 }
 

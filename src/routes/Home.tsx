@@ -12,9 +12,9 @@ import Ttweet from '@/components/Ttweet/Ttweet';
 import { EdittingProvider } from '@/contexts/EdttingContext';
 import { TtweetProvider } from '@/contexts/TtweetContext';
 import { AttachmentForm } from '@/components/Ttweet/AttachmentForm';
-import { AttachmentContext, AttachmentProvider } from '@/contexts/AttachmentContext';
+import { AttachmentContext, AttachmentProvider, SetattachmentContext } from '@/contexts/AttachmentContext';
 import { AttachmentPreview } from '@/components/Ttweet/AttachmentPreview';
-import { InputProvider, SetTextContext, SetUrlContext, TextContext } from '@/contexts/InputTtweetContext';
+import { InputProvider, SetTextContext, TextContext } from '@/contexts/InputTtweetContext';
 import { StorageService } from '@/services/firebase/storageService';
 
 function Home(): React.JSX.Element {
@@ -81,7 +81,7 @@ function SubmitButton() {
     const ttweet = useContext(TextContext);
     const setTtweet = useContext(SetTextContext);
 
-    const setUrl = useContext(SetUrlContext);
+    const setAttachment = useContext(SetattachmentContext);
     const attachment = useContext(AttachmentContext);
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -100,9 +100,16 @@ function SubmitButton() {
 
             const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
             if (!isCollection(collection)) return;
-            collection.set(msg);
-            setTtweet('');
-            setUrl('');
+
+            collection
+                .set(msg)
+                .then(() => {
+                    setTtweet('');
+                    setAttachment('');
+                })
+                .catch(() => {
+                    Error(`Error : set ${msg.id ?? 'unknown'} collection`);
+                });
         });
     };
     return (
