@@ -2,7 +2,7 @@ import Collection, { QuerySnapshot, DocumentData } from '@/models/collection';
 
 export type MessageInfo = { id?: string; text: string; createdAt: number; createdBy: string; attachment?: string };
 export function isMessageInfo(data: unknown): data is MessageInfo {
-    return (data as MessageInfo).id != undefined;
+    return (data as MessageInfo).createdBy != undefined;
 }
 
 export type Action<T> = (value: T) => void;
@@ -16,12 +16,12 @@ export type CollectionDictionary = {
 
 export interface CollectionContainer {
     id: CollectionID;
-    set(msg: MessageInfo): void;
+    set(msg: MessageInfo): Promise<void>;
     get(): MessageInfo[];
     appendToProp(prop: Prop<MessageInfo[]>): void;
     onSnapshot(onNext: QuerySnapshotAction): MessageInfo[];
     delete(message: MessageInfo): Promise<void>;
-    update(message: MessageInfo): void;
+    update(message: MessageInfo): Promise<void>;
 }
 
 export function isCollection(value: unknown): value is CollectionContainer {

@@ -100,6 +100,7 @@ function SubmitButton() {
 
             const collection = DBService.GetInstance().Collection[CollectionID.ttweet];
             if (!isCollection(collection)) return;
+            if (!isMessageInfo(msg)) return;
 
             collection
                 .set(msg)
