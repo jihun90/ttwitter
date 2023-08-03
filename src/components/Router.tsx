@@ -5,10 +5,11 @@ import Navigation from './Navigation';
 import Profile from '@/routes/Profile';
 
 type LoginProps = {
+    refreshDisplayName: () => void;
     isLoggedIn: boolean;
 };
 
-function AppRouter({ isLoggedIn }: LoginProps): React.ReactElement {
+function AppRouter({ refreshDisplayName, isLoggedIn }: LoginProps): React.ReactElement {
     return (
         <Router>
             {isLoggedIn && <Navigation />}
@@ -16,7 +17,7 @@ function AppRouter({ isLoggedIn }: LoginProps): React.ReactElement {
                 {isLoggedIn ? (
                     <>
                         <Route path="/" element={<Home />} />
-                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/profile" element={<Profile refreshDisplayName={refreshDisplayName} />} />
                     </>
                 ) : (
                     <Route path="/" element={<Auth />} />

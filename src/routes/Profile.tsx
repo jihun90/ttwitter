@@ -2,10 +2,14 @@ import LogOutButton from '@/components/LogOutButton';
 import { AuthService } from '@/services/firebase/authService';
 import { useState } from 'react';
 
-function Profile(): React.JSX.Element {
+type Props = {
+    refreshDisplayName: () => void;
+};
+
+function Profile({ refreshDisplayName }: Props): React.JSX.Element {
     const auth = AuthService.GetInstance();
     const [displayName, setDisplayName] = useState(auth.user?.displayName ?? auth.user?.email ?? '');
-    const [photoURL, setphotoURL] = useState(auth.user?.photoURL ?? '');
+    const [photoURL, setphotoURL] = useState(auth.user?.photoURL ?? ''); //ToDo
 
     const onChange = (event: React.FormEvent<HTMLInputElement>) => {
         setDisplayName(event.currentTarget.value);
@@ -16,7 +20,10 @@ function Profile(): React.JSX.Element {
 
         auth.UpdateProfile(displayName, photoURL)
             .then(() => {
-                console.log('sucess');
+                if (auth.user) {
+                    setDisplayName(auth.user.displayName ?? displayName);
+                    refreshDisplayName();
+                }
             })
             .catch(() => console.log('fail'));
     };

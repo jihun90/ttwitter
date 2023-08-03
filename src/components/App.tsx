@@ -5,6 +5,10 @@ import { AuthService } from '@/services/firebase/authService';
 function App() {
     const [init, setInit] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    const [, setDisplayName] = useState<string>('');
+    const refreshDisplayName = (): void => setDisplayName(AuthService.GetInstance().user?.displayName ?? 'No Name');
+
     useEffect(() => {
         AuthService.GetInstance().OnAuthChanged(user => {
             if (!user) return; //ToDo user가 없을때 처리
@@ -17,7 +21,7 @@ function App() {
 
     return (
         <>
-            {init ? <AppRouter isLoggedIn={isLoggedIn} /> : 'Initializing...'}
+            {init ? <AppRouter refreshDisplayName={refreshDisplayName} isLoggedIn={isLoggedIn} /> : 'Initializing...'}
             <footer>&copy; {new Date().getFullYear()} ttwitter</footer>
         </>
     );
