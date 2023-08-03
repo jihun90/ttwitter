@@ -10,6 +10,7 @@ import {
     NextOrObserver,
     onAuthStateChanged,
     signOut,
+    updateProfile,
 } from 'firebase/auth';
 import { App } from './appService';
 
@@ -57,6 +58,11 @@ class AuthService {
 
     IsUserInfo(user: unknown): user is UserInfo {
         return (user as UserInfo).uid != undefined;
+    }
+
+    UpdateProfile(displayName: string, photoURL: string): Promise<void> {
+        if (!this.user) throw Error('User is found');
+        return updateProfile(this.user, { displayName: displayName, photoURL: photoURL });
     }
 }
 
