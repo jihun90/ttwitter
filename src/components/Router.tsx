@@ -11,7 +11,7 @@ type LoginProps = {
 
 function AppRouter({ refreshDisplayName, isLoggedIn }: LoginProps): React.ReactElement {
     return (
-        <Router>
+        <Router basename={import.meta.env.BASE_URL}>
             {isLoggedIn && <Navigation />}
             <div
                 style={{
