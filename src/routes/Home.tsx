@@ -70,7 +70,6 @@ function TextFormView() {
 
     const onChange = (event: React.FormEvent<HTMLInputElement>): void => {
         const value = event.currentTarget?.value;
-        if (!value) return;
         setTtweet(value);
     };
 
