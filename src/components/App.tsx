@@ -3,7 +3,7 @@ import AppRouter from '@/components/Router';
 import { AuthService } from '@/services/firebase/authService';
 
 function App() {
-    const [init, setInit] = useState<boolean>(false);
+    const [init, setInit] = useState<boolean>(true);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     const [, setDisplayName] = useState<string>('');
