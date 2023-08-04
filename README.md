@@ -11,6 +11,9 @@ Cloning Twitter with React-ts and Firebase
  - css 지식이 전혀 없음.. 공부 필요
  - 서비스들을 싱글톤으로 구현해보았는데, 현재 앱에서 무슨 장단점이 있는지 파악하지 못함. (하다보면 장/단점이 보일것라 생각하여 과감하게 구현하였음)
    - 웹 생태계에 대한 지식이 많이 부족
+  
+### 참고 자료
+ - [노마드코더 - 트위터 클론코딩](https://nomadcoders.co/nwitter?gad=1&gclid=Cj0KCQjwoK2mBhDzARIsADGbjepyWnMrSkHr8-DZTu7uzpDfcUfjPiLoPJKS2i_8p0Ny-UDGTkXLurAaAhJ0EALw_wcB)
 
 #### 주저리
 실습을 통한 학습을 진행하였고, 위와 같은 내용으로 해당 프로젝트를 시작하였고, 부족한 점이 많아보인다.
