@@ -30,13 +30,28 @@ function Profile({ refreshDisplayName }: Props): React.JSX.Element {
 
     //photourl 만들기
     return (
-        <>
-            <form onSubmit={onSubmit}>
-                <input type="text" placeholder="Enter Profile" onChange={onChange} value={displayName} required />
-                <input type="submit" value={`Edit Profile`} required />
+        <div className="container">
+            <form onSubmit={onSubmit} className="profileForm">
+                <input
+                    type="text"
+                    autoFocus
+                    placeholder="Enter Profile"
+                    onChange={onChange}
+                    value={displayName}
+                    required
+                    className="formInput"
+                />
+                <input
+                    type="submit"
+                    value="Update Profile"
+                    className="formBtn"
+                    style={{
+                        marginTop: 10,
+                    }}
+                />
             </form>
             <LogOutButton />
-        </>
+        </div>
     );
 }
 export default Profile;

@@ -4,6 +4,8 @@ import React, { useContext } from 'react';
 import UpdateForm from '@/components/Ttweet/UpdateForm';
 import { EdittingContext, SetEdittingContext } from '@/contexts/EdttingContext';
 import { TtweetContext } from '@/contexts/TtweetContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Ttweet() {
     const ttweet = useContext(TtweetContext);
@@ -16,7 +18,7 @@ function Ttweet() {
         return (
             <>
                 <UpdateForm ttweetObj={ttweet} />
-                <ToggleEdittingButton message="Cancel" />
+                <CancelButton />
             </>
         );
     };
@@ -24,21 +26,37 @@ function Ttweet() {
     const DefualtView = () => {
         return (
             <>
-                {ttweet.attachment && <img src={ttweet.attachment} width="100px" height="100px" />}
+                {ttweet.attachment && <img src={ttweet.attachment} />}
                 {ttweet.text && <h4>{ttweet.text}</h4>}
-                <DeleteButton ttweetobj={ttweet} />
-                <ToggleEdittingButton message="Edit Ttweet" />
+                <div className="nweet__actions">
+                    <DeleteButton ttweetobj={ttweet} />
+                    <EditToggleButton />
+                </div>
             </>
         );
     };
 
-    return <div>{editting ? <UpdateView /> : <DefualtView />}</div>;
+    return <div className="nweet">{editting ? <UpdateView /> : <DefualtView />}</div>;
 }
 
-function ToggleEdittingButton({ message }: { message: string }): React.JSX.Element {
+function CancelButton(): React.JSX.Element {
     const setEditting = useContext(SetEdittingContext);
     const toggleEdtting = () => setEditting(pre => !pre);
-    return <button onClick={toggleEdtting}>{message}</button>;
+    return (
+        <span onClick={toggleEdtting} className="formBtn cancelBtn">
+            Cancel
+        </span>
+    );
+}
+
+function EditToggleButton(): React.JSX.Element {
+    const setEditting = useContext(SetEdittingContext);
+    const toggleEdtting = () => setEditting(pre => !pre);
+    return (
+        <span onClick={toggleEdtting}>
+            <FontAwesomeIcon icon={faPencilAlt} />
+        </span>
+    );
 }
 
 export default Ttweet;

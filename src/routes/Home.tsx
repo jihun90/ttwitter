@@ -36,9 +36,9 @@ function Home(): React.JSX.Element {
     }, []);
 
     return (
-        <div>
+        <div className="container">
             <InputView />
-            <div>
+            <div style={{ marginTop: 30 }}>
                 {ttweets.map(ttweet => (
                     <EdittingProvider key={ttweet.id}>
                         <TtweetProvider key={ttweet.id} ttweet={ttweet} chidren={<Ttweet key={ttweet.id} />} />
@@ -53,7 +53,7 @@ function InputView() {
     return (
         <InputProvider>
             <AttachmentProvider>
-                <div>
+                <div className="factoryInput__container">
                     <TextFormView />
                     <AttachmentForm />
                     <AttachmentPreview />
@@ -74,7 +74,16 @@ function TextFormView() {
         setTtweet(value);
     };
 
-    return <input value={ttweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />;
+    return (
+        <input
+            value={ttweet}
+            onChange={onChange}
+            type="text"
+            placeholder="What's on your mind?"
+            maxLength={120}
+            className="factoryInput__input"
+        />
+    );
 }
 
 function SubmitButton() {
@@ -114,8 +123,8 @@ function SubmitButton() {
         });
     };
     return (
-        <form onSubmit={onSubmit}>
-            <input type="submit" value="ttweet" />
+        <form onSubmit={onSubmit} className="factoryForm">
+            <input type="submit" value="ttweet" className="factoryInput__arrow" />
         </form>
     );
 }

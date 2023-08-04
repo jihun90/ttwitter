@@ -1,6 +1,8 @@
 import { CollectionID, MessageInfo, isCollection } from '@/models/collectionContainer';
 import { DBService } from '@/services/firebase/dbService';
 import { StorageService } from '@/services/firebase/storageService';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type Prop = {
     ttweetobj: MessageInfo;
@@ -24,5 +26,9 @@ export default function DeleteButton({ ttweetobj }: Prop) {
             }
         }
     }
-    return <button onClick={onDeleteClick}>Delete Ttweet</button>;
+    return (
+        <span onClick={onDeleteClick}>
+            <FontAwesomeIcon icon={faTrash} />
+        </span>
+    );
 }

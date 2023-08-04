@@ -1,5 +1,7 @@
 import { useContext, useEffect, useRef } from 'react';
 import { AttachmentContext, SetattachmentContext } from '@/contexts/AttachmentContext';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function AttachmentForm() {
     const attachment = useContext(AttachmentContext);
@@ -29,5 +31,21 @@ export function AttachmentForm() {
         reader.readAsDataURL(files[0]);
     };
 
-    return <input ref={imageInput} type="file" accept="image/*" onChange={onFileChanged} />;
+    return (
+        <>
+            <label htmlFor="attach-file" className="factoryInput__label">
+                <span>Add photos</span>
+                <FontAwesomeIcon icon={faPlus} />
+                <input
+                    id="attach-file"
+                    type="file"
+                    accept="image/*"
+                    onChange={onFileChanged}
+                    style={{
+                        opacity: 0,
+                    }}
+                />
+            </label>
+        </>
+    );
 }

@@ -15,10 +15,19 @@ function AppRouter({ refreshDisplayName, isLoggedIn }: LoginProps): React.ReactE
             {isLoggedIn && <Navigation />}
             <Routes>
                 {isLoggedIn ? (
-                    <>
+                    <div
+                        style={{
+                            maxWidth: 890,
+                            width: '100%',
+                            margin: '0 auto',
+                            marginTop: 80,
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                    >
                         <Route path="/" element={<Home />} />
                         <Route path="/profile" element={<Profile refreshDisplayName={refreshDisplayName} />} />
-                    </>
+                    </div>
                 ) : (
                     <Route path="/" element={<Auth />} />
                 )}
