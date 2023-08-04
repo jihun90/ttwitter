@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const config: UserConfigExport = {
-    base: "./",
+    base: "/ttwitter/",
     plugins: [react(), tsconfigPaths()],
     resolve: {
         alias: [
