@@ -5,6 +5,8 @@ import {
     UserCredential,
     AuthService,
 } from '@/services/firebase/authService';
+import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 enum SocialType {
     Google = 'Google',
@@ -31,7 +33,14 @@ function SocialButton({ type }: SocialButtonProps) {
         const data: Promise<UserCredential> = AuthService.GetInstance().SignInWithPopup(provider);
     };
 
-    return <button name={type.toString()} onClick={onClick}>{`Continue With ${type.toString()}`}</button>;
+    return (
+        <div className="authBtns">
+            <button name={type.toString()} onClick={onClick} className="authBtn">
+                {`Continue With ${type.toString()}`}{' '}
+                {type == SocialType.Google ? <FontAwesomeIcon icon={faGoogle} /> : <FontAwesomeIcon icon={faGithub} />}
+            </button>
+        </div>
+    );
 }
 
 export { SocialType };

@@ -16,7 +16,15 @@ function AuthInput({ inputType, state, dispatch }: InputComponentProps): ReactNo
     }
 
     return (
-        <input name={inputType} type={inputType} placeholder={inputType} required value={state} onChange={onChange} />
+        <input
+            name={inputType}
+            type={inputType}
+            placeholder={inputType}
+            required
+            value={state}
+            onChange={onChange}
+            className="authInput"
+        />
     );
 }
 

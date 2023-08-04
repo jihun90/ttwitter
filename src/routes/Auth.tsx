@@ -2,6 +2,8 @@ import AuthInput from '@/components/Auth/AuthInput';
 import { UserCredential, AuthError, AuthService } from '@/services/firebase/authService';
 import { useState } from 'react';
 import { SocialButton, SocialType } from '@/components/Auth/SocialButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 function Auth(): React.JSX.Element {
     const [email, setEmail] = useState<string>('');
@@ -20,14 +22,21 @@ function Auth(): React.JSX.Element {
     const toggleAccount = () => setIsNewAccount((prev: boolean) => !prev);
 
     return (
-        <div>
-            <form onSubmit={onSubmit}>
+        <div className="authContainer">
+            <FontAwesomeIcon icon={faTwitter} color={'#04AAFF'} size="3x" style={{ marginBottom: 30 }} />
+            <form onSubmit={onSubmit} className="container">
                 <AuthInput inputType={'email'} state={email} dispatch={setEmail} />
                 <AuthInput inputType="password" state={password} dispatch={setPassword} />
-                <input type="submit" value={isNewAccount ? 'Create Account' : 'Sign In'} />
+                <input
+                    type="submit"
+                    value={isNewAccount ? 'Create Account' : 'Sign In'}
+                    className="authInput authSubmit"
+                />
             </form>
-            {error}
-            <span onClick={toggleAccount}>{isNewAccount ? ' Sign In' : 'Create Account'}</span>
+            {error && <span className="authError">{error}</span>}
+            <span onClick={toggleAccount} className="authSwitch">
+                {isNewAccount ? ' Sign In' : 'Create Account'}
+            </span>
             <div>
                 <SocialButton type={SocialType.Google} />
                 <SocialButton type={SocialType.Github} />

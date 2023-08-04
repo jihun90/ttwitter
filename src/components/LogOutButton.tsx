@@ -12,7 +12,11 @@ function LogOutButton(): React.JSX.Element {
             });
     };
 
-    return <button onClick={onLogOutClick}>Log Out</button>;
+    return (
+        <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
+            Log Out
+        </span>
+    );
 }
 
 export default LogOutButton;

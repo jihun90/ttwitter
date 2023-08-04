@@ -29,10 +29,18 @@ export default function UpdateForm({ ttweetObj }: Prop) {
     };
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className="container nweetEdit">
             <h4>{ttweetObj.text}</h4>
-            <input type="text" onChange={onChange} placeholder="Edit your ttweet" value={newTtweet} required />
-            <input type="submit" value="Update ttweett" required />
+            <input
+                type="text"
+                autoFocus
+                onChange={onChange}
+                placeholder="Edit your ttweet"
+                value={newTtweet}
+                required
+                className="formInput"
+            />
+            <input type="submit" value="Update ttweett" required className="formBtn" />
         </form>
     );
 }
