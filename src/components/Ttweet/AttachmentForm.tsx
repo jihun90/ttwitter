@@ -3,7 +3,7 @@ import { AttachmentContext, SetattachmentContext } from '@/contexts/AttachmentCo
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export function AttachmentForm() {
+export function AttachmentInput() {
     const attachment = useContext(AttachmentContext);
     const setAttachment = useContext(SetattachmentContext);
 

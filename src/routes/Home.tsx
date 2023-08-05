@@ -11,7 +11,7 @@ import { useState, useContext, useEffect } from 'react';
 import Ttweet from '@/components/Ttweet/Ttweet';
 import { EdittingProvider } from '@/contexts/EdttingContext';
 import { TtweetProvider } from '@/contexts/TtweetContext';
-import { AttachmentForm } from '@/components/Ttweet/AttachmentForm';
+import { AttachmentInput } from '@/components/Ttweet/AttachmentForm';
 import { AttachmentContext, AttachmentProvider, SetattachmentContext } from '@/contexts/AttachmentContext';
 import { AttachmentPreview } from '@/components/Ttweet/AttachmentPreview';
 import { InputProvider, SetTextContext, TextContext } from '@/contexts/InputTtweetContext';
@@ -53,18 +53,16 @@ function InputView() {
     return (
         <InputProvider>
             <AttachmentProvider>
-                <div className="factoryInput__container">
-                    <TextFormView />
-                    <AttachmentForm />
+                <>
+                    <InputForm />
                     <AttachmentPreview />
-                    <SubmitButton />
-                </div>
+                </>
             </AttachmentProvider>
         </InputProvider>
     );
 }
 
-function TextFormView() {
+function TextInput() {
     const ttweet = useContext(TextContext);
     const setTtweet = useContext(SetTextContext);
 
@@ -85,7 +83,7 @@ function TextFormView() {
     );
 }
 
-function SubmitButton() {
+function InputForm() {
     const ttweet = useContext(TextContext);
     const setTtweet = useContext(SetTextContext);
 
@@ -123,7 +121,11 @@ function SubmitButton() {
     };
     return (
         <form onSubmit={onSubmit} className="factoryForm">
-            <input type="submit" value="ttweet" className="factoryInput__arrow" />
+            <div className="factoryInput__container">
+                <TextInput />
+                <input type="submit" value="&rarr;" className="factoryInput__arrow" />
+                <AttachmentInput />
+            </div>
         </form>
     );
 }
