@@ -17,6 +17,9 @@ Cloning Twitter with React-ts and Firebase
 ### 참고 자료
  - [노마드코더 - 트위터 클론코딩](https://nomadcoders.co/nwitter?gad=1&gclid=Cj0KCQjwoK2mBhDzARIsADGbjepyWnMrSkHr8-DZTu7uzpDfcUfjPiLoPJKS2i_8p0Ny-UDGTkXLurAaAhJ0EALw_wcB)
 
+### 배포 URL
+ - https://jihun90.github.io/ttwitter/
+
 #### 주저리
 실습을 통한 학습을 진행하였고, 위와 같은 내용으로 해당 프로젝트를 시작하였고, 부족한 점이 많아보인다.
 리액트, 타입스크립트, 브라우저 등등 전문지식이 부족한 상태로 시작하여 아쉬운점이 많지만, 해당 클론코딩 실습을 통해 리액트와 타입스크립트에 조금 더 익숙해졌고 흥미도 생겼다.
